@@ -1,7 +1,7 @@
 /* eslint-disable max-lines-per-function */
 module.exports = {
   async up(queryInterface, _Sequelize) {
-     await queryInterface.bulkInsert('users', [
+    await queryInterface.bulkInsert('users', [
       {
         id: 1,
         name: 'Delivery App Admin',
