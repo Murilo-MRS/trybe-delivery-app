@@ -22,7 +22,7 @@ module.exports = {
       sellerId: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        field: 'user_id',
+        field: 'seller_id',
         references: {
           model: 'users',
           key: 'id',
