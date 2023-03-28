@@ -1,5 +1,4 @@
-const { Sequelize } = require('sequelize');
-
+/* eslint-disable max-lines-per-function */
 const UserSchema = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },

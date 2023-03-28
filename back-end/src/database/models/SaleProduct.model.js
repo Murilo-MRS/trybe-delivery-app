@@ -1,5 +1,4 @@
-const { Sequelize } = require('sequelize');
-
+/* eslint-disable max-lines-per-function */
 const SalesProductsSchema = (sequelize, DataTypes) => {
   const SalesProducts = sequelize.define('SaleProduct', {
     saleId: { type: DataTypes.INTEGER, foreignKey: true },
