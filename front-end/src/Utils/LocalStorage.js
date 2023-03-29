@@ -5,17 +5,19 @@ export function getProductsCart() {
   const cartItems = JSON.parse(localStorage.getItem(CART_ITEMS));
   return cartItems;
 }
-export function saveProductCart(product) {
+export function addProductCart(product) {
   const data = getProductsCart() || [];
-  localStorage.setItem(CART_ITEMS, JSON.stringify([...data, product]));
+  const newData = data.filter((p) => p.id !== product.id);
+  if (product.quantity === 0) {
+    return localStorage.setItem(CART_ITEMS, JSON.stringify(newData));
+  }
+  return localStorage.setItem(CART_ITEMS, JSON.stringify([...newData, product]));
 }
 
-// Em analise
-/* export function removeProductCart(product) {
-  const products = getProductsCart();
-  const productsFiltered = products.filter((p) => p.id !== product.id);
-  localStorage.setItem(CART_ITEMS, JSON.stringify(productsFiltered));
-} */
+export function managerCart() {
+
+}
+
 export function clearCart() {
   localStorage.setItem(CART_ITEMS, JSON.stringify([]));
 }
