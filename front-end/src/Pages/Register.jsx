@@ -1,34 +1,37 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import Button from '../Components/Button';
 import Input from '../Components/Input';
 import { userRequest, setToken } from '../Utils/axios';
 import verifyFields from '../Utils/validateFields';
 
-function Login({ history }) {
+function Register() {
+  const MIN_LENGTH_NAME = 12;
+  const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLogged, setIsLogged] = useState(false);
-  const [isIncorrectValues, setIsIncorrectValues] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
   const [isDisable, setIsDisable] = useState(true);
+  const [isIncorrectValues, setIsIncorrectValues] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const verify = verifyFields(email, password);
-    setIsDisable(!verify);
-  }, [email, password]);
+    const verifyName = userName.length >= MIN_LENGTH_NAME;
+    setIsDisable(!verify || !verifyName);
+  }, [email, password, userName]);
 
-  const handleLogin = async () => {
-    const loginInfo = {
+  const handleRegister = async () => {
+    const userInfo = {
+      name: userName,
       email,
       password,
+      role: 'customer',
     };
     try {
-      const token = await userRequest('/login', loginInfo);
+      const token = await userRequest('/register', userInfo);
       setToken(token.token);
-      return setIsLogged(true);
+      return setIsRegistered(true);
     } catch (error) {
       setIsIncorrectValues(true);
       return setErrorMessage(error.response.data.message);
@@ -37,13 +40,23 @@ function Login({ history }) {
 
   return (
     <div>
+      <h1>Cadastro</h1>
       <form>
+        <Input
+          type="text"
+          placeholder="Seu nome"
+          label="Nome"
+          onChange={ ({ target: { value } }) => setUserName(value) }
+          dataTestId="common_register__input-name"
+          id="name-input"
+          value={ userName }
+        />
         <Input
           type="email"
           placeholder="email@email.com"
           label="Email"
           onChange={ ({ target: { value } }) => setEmail(value) }
-          dataTestId="common_login__input-email"
+          dataTestId="common_register__input-email"
           id="email-input"
           value={ email }
         />
@@ -52,38 +65,30 @@ function Login({ history }) {
           placeholder="*******"
           label="Password"
           onChange={ ({ target: { value } }) => setPassword(value) }
-          dataTestId="common_login__input-password"
+          dataTestId="common_register__input-password"
           id="password-input"
           value={ password }
         />
         <Button
-          onClick={ handleLogin }
-          text="Login"
-          dataTestId="common_login__button-login"
+          onClick={ () => handleRegister() }
+          text="Cadastrar"
+          dataTestId="common_register__button-register"
           disabled={ isDisable }
         />
-        <Button
-          onClick={ () => history.push('/register') }
-          text="Ainda não tenho conta"
-          dataTestId="common_login__button-register"
-          disabled={ false }
-        />
+
       </form>
       {
         isIncorrectValues
         && (
-          <p data-testid="common_login__element-invalid-email">
+          <p data-testid="common_register__element-invalid_register">
             { errorMessage }
           </p>
         )
       }
-      {isLogged && <Redirect to="/customer/products" />}
+      {isRegistered && <Redirect to="/customer/products" />}
+
     </div>
   );
 }
 
-Login.propTypes = {
-  history: PropTypes.func,
-}.isRequired;
-
-export default Login;
+export default Register;
