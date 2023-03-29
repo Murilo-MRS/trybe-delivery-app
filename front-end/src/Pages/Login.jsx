@@ -80,7 +80,7 @@ function Login() {
           </p>
         )
       }
-      {isLogged && <Redirect to="/customer" />}
+      {isLogged && <Redirect to="/customer/products" />}
       {/* {toRegister && <Redirect to="/register" />} */}
     </div>
   );
