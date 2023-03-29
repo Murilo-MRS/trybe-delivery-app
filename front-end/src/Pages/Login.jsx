@@ -6,6 +6,7 @@ import Button from '../Components/Button';
 import Input from '../Components/Input';
 import { userRequest, setToken } from '../Utils/axios';
 import verifyFields from '../Utils/validateFields';
+import { saveUser } from '../Utils/LocalStorage';
 
 function Login({ history }) {
   const [email, setEmail] = useState('');
@@ -26,8 +27,9 @@ function Login({ history }) {
       password,
     };
     try {
-      const token = await userRequest('/login', loginInfo);
-      setToken(token.token);
+      const { id, ...user } = await userRequest('/login', loginInfo);
+      saveUser(user);
+      setToken(user.token);
       return setIsLogged(true);
     } catch (error) {
       setIsIncorrectValues(true);

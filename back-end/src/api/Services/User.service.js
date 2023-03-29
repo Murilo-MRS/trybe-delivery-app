@@ -27,7 +27,7 @@ const login = async (loginInfo) => {
     errorGenerator(404, 'email or password is invalid');
   }
   const token = generateToken(rest);
-  return token;
+  return { token, ...rest };
 };
 
 const register = async (userInfo) => {
@@ -47,7 +47,12 @@ const register = async (userInfo) => {
   
   const result = await User.create(userInforEncripted);
 
-  return result;
+  const {
+    dataValues: { password: passwordDB, ...rest },
+  } = result;
+  
+  const token = generateToken(rest);
+  return { token, ...rest };
 };
 
 module.exports = {
