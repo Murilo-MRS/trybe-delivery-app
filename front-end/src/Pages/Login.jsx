@@ -1,11 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import Button from '../Components/Button';
 import Input from '../Components/Input';
-import { loginRequest, setToken } from '../Utils/axios';
+import { userRequest, setToken } from '../Utils/axios';
+import verifyFields from '../Utils/validateFields';
 
-function Login() {
+function Login({ history }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLogged, setIsLogged] = useState(false);
@@ -13,14 +15,8 @@ function Login() {
   const [isDisable, setIsDisable] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const verifyFields = () => {
-    const MIN_LENGTH = 6;
-    const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return regexEmail.test(email) && password.length >= MIN_LENGTH;
-  };
-
   useEffect(() => {
-    const verify = verifyFields();
+    const verify = verifyFields(email, password);
     setIsDisable(!verify);
   }, [email, password]);
 
@@ -30,7 +26,7 @@ function Login() {
       password,
     };
     try {
-      const token = await loginRequest('/login', loginInfo);
+      const token = await userRequest('/login', loginInfo);
       setToken(token.token);
       return setIsLogged(true);
     } catch (error) {
@@ -67,7 +63,7 @@ function Login() {
           disabled={ isDisable }
         />
         <Button
-          onClick={ () => console.log('register') }
+          onClick={ () => history.push('/register') }
           text="Ainda não tenho conta"
           dataTestId="common_login__button-register"
           disabled={ false }
@@ -82,9 +78,12 @@ function Login() {
         )
       }
       {isLogged && <Redirect to="/customer/products" />}
-      {/* {toRegister && <Redirect to="/register" />} */}
     </div>
   );
 }
+
+Login.propTypes = {
+  history: PropTypes.func,
+}.isRequired;
 
 export default Login;

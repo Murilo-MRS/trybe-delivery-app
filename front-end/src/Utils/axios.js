@@ -7,7 +7,7 @@ export const setToken = (token) => {
   api.defaults.headers.common.Authorization = token;
 };
 
-export const loginRequest = async (endpoint, body) => {
+export const userRequest = async (endpoint, body) => {
   const { data } = await api.post(endpoint, body);
   return data;
 };

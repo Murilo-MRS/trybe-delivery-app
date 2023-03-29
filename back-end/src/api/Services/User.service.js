@@ -15,7 +15,7 @@ const getUser = async (param) => {
 const login = async (loginInfo) => {
   validatorFieldsLogin(loginInfo);
   const { email, password } = loginInfo;
-  const user = getUser({ email });
+  const user = await getUser({ email });
   
   if (!user) {
     errorGenerator(404, 'Not found');
