@@ -42,36 +42,38 @@ function Login() {
 
   return (
     <div>
-      <Input
-        type="email"
-        placeholder="email@email.com"
-        label="Email"
-        onChange={ ({ target: { value } }) => setEmail(value) }
-        dataTestId="common_login__input-email"
-        id="email-input"
-        value={ email }
-      />
-      <Input
-        type="password"
-        placeholder="*******"
-        label="Password"
-        onChange={ ({ target: { value } }) => setPassword(value) }
-        dataTestId="common_login__input-password"
-        id="password-input"
-        value={ password }
-      />
-      <Button
-        onClick={ handleLogin }
-        text="Login"
-        dataTestId="common_login__button-login"
-        disabled={ isDisable }
-      />
-      <Button
-        onClick={ () => console.log('register') }
-        text="Ainda não tenho conta"
-        dataTestId="common_login__button-register"
-        disabled={ false }
-      />
+      <form>
+        <Input
+          type="email"
+          placeholder="email@email.com"
+          label="Email"
+          onChange={ ({ target: { value } }) => setEmail(value) }
+          dataTestId="common_login__input-email"
+          id="email-input"
+          value={ email }
+        />
+        <Input
+          type="password"
+          placeholder="*******"
+          label="Password"
+          onChange={ ({ target: { value } }) => setPassword(value) }
+          dataTestId="common_login__input-password"
+          id="password-input"
+          value={ password }
+        />
+        <Button
+          onClick={ handleLogin }
+          text="Login"
+          dataTestId="common_login__button-login"
+          disabled={ isDisable }
+        />
+        <Button
+          onClick={ () => console.log('register') }
+          text="Ainda não tenho conta"
+          dataTestId="common_login__button-register"
+          disabled={ false }
+        />
+      </form>
       {
         isIncorrectValues
         && (
