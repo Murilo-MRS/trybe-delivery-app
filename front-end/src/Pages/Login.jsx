@@ -31,7 +31,6 @@ function Login() {
     };
     try {
       const token = await loginRequest('/login', loginInfo);
-      console.log(token.token);
       setToken(token.token);
       return setIsLogged(true);
     } catch (error) {
