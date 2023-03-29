@@ -1,4 +1,4 @@
-const { infoLoginSchema } = require('./schemas');
+const { infoLoginSchema, infoUserSchema } = require('./schemas');
 const errorGenerator = require('../../Utils/errorGenerator');
 
 const validatorFieldsLogin = (infoLogin) => {
@@ -9,6 +9,15 @@ const validatorFieldsLogin = (infoLogin) => {
   return null;
 };
 
+const validatorFieldsRegister = (infoUser) => {
+  const { error } = infoUserSchema.validate(infoUser);
+  if (error) {
+    errorGenerator(400, error.message);
+  }
+  return null;
+};
+
 module.exports = {
   validatorFieldsLogin,
+  validatorFieldsRegister,
 };
