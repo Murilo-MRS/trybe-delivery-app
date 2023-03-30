@@ -12,7 +12,13 @@ const register = async (req, res) => {
     return res.status(201).json(user);
 };
 
+const getSellers = async (req, res) => { 
+  const sellers = await userService.getUserByRole('seller');
+  return res.status(200).json(sellers);
+};
+
 module.exports = {
   login,
   register,
+  getSellers,
 };

@@ -12,6 +12,11 @@ const getUser = async (param) => {
   return user;
 };
 
+const getUserByRole = async (role) => {
+  const user = await User.findAll({ where: { role } });
+  return user;
+};
+
 const login = async (loginInfo) => {
   validatorFieldsLogin(loginInfo);
   const { email, password } = loginInfo;
@@ -58,4 +63,6 @@ const register = async (userInfo) => {
 module.exports = {
   login,
   register,
+  getUserByRole,
+  getUser,
 };

@@ -1,16 +1,22 @@
 import React from 'react';
-import DetailsOrders from '../Components/DetailsOrders';
-import FinalizeOrder from '../Components/FinalizeOrders';
+import PropTypes from 'prop-types';
+import FinalizeOrder from '../Components/FinalizeOrder';
+import OrderDetails from '../Components/OrderDetails';
 import Navbar from '../Components/Navbar';
+import Auth from '../Components/Auth';
 
-function Checkout() {
+function Checkout({ history }) {
   return (
     <main>
+      <Auth />
       <Navbar />
-      <FinalizeOrder />
-      <DetailsOrders />
+      <OrderDetails />
+      <FinalizeOrder history={ history } />
     </main>
   );
 }
 
+Checkout.propTypes = {
+  history: PropTypes.func,
+}.isRequired;
 export default Checkout;
