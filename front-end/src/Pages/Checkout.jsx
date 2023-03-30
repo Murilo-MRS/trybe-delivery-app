@@ -1,14 +1,14 @@
 import React from 'react';
-import DetailsOrders from '../Components/DetailsOrders';
-import FinalizeOrder from '../Components/FinalizeOrders';
+import FinalizeOrder from '../Components/FinalizeOrder';
+import OrderDetails from '../Components/OrderDetails';
 import Navbar from '../Components/Navbar';
 
 function Checkout() {
   return (
     <main>
       <Navbar />
+      <OrderDetails />
       <FinalizeOrder />
-      <DetailsOrders />
     </main>
   );
 }

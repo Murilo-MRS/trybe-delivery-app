@@ -5,6 +5,7 @@ import Navbar from '../Components/Navbar';
 import ProductCard from '../Components/ProductCard';
 import { productsRequest } from '../Utils/axios';
 import { getProductsCart, getUser } from '../Utils/LocalStorage';
+import formatValues from '../Utils/normalize';
 
 export default function Products({ history }) {
   const [isLogged, setIsLogged] = useState(false);
@@ -34,7 +35,7 @@ export default function Products({ history }) {
   useEffect(() => {
     const total = cartProduct
       .reduce((acc, { price, quantity }) => acc + (Number(price) * Number(quantity)), 0);
-    setTotalPrice(total.toLocaleString('pt-BR', { minimumFractionDigits: 2 }));
+    setTotalPrice(formatValues(total));
   }, [cartProduct]);
 
   return (

@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from './Button';
-import { addProductCart, getProductsCart } from '../Utils/LocalStorage';
+import { managerProductCart, getProductsCart } from '../Utils/LocalStorage';
+import formatValues from '../Utils/normalize';
 
 export default function ProductCard(product) {
   const { id, productName, price, urlImage, forceRender } = product;
@@ -14,7 +15,7 @@ export default function ProductCard(product) {
     setQuantity(quantityProduct);
   }, []);
 
-  useEffect(() => addProductCart({ ...product, quantity }), [quantity]);
+  useEffect(() => managerProductCart({ ...product, quantity }), [quantity]);
 
   const changeCart = async ({ target }) => {
     const products = getProductsCart() || [];
@@ -55,7 +56,7 @@ export default function ProductCard(product) {
         <span
           data-testid={ `customer_products__element-card-price-${id}` }
         >
-          { Number(price).toLocaleString('pt-BR', { minimumFractionDigits: 2 }) }
+          { formatValues(price) }
         </span>
       </p>
       <Button

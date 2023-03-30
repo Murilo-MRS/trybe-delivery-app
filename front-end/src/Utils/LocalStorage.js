@@ -5,17 +5,24 @@ export function getProductsCart() {
   const cartItems = JSON.parse(localStorage.getItem(CART_ITEMS));
   return cartItems;
 }
+
+export function removeProductCart(product) {
+  const data = getProductsCart() || [];
+  const newData = data.filter((p) => p.id !== product.id);
+  return localStorage.setItem(CART_ITEMS, JSON.stringify(newData));
+}
+
 export function addProductCart(product) {
   const data = getProductsCart() || [];
   const newData = data.filter((p) => p.id !== product.id);
-  if (product.quantity === 0) {
-    return localStorage.setItem(CART_ITEMS, JSON.stringify(newData));
-  }
   return localStorage.setItem(CART_ITEMS, JSON.stringify([...newData, product]));
 }
 
-export function managerCart() {
-
+export function managerProductCart(product) {
+  if (product.quantity === 0) {
+    return removeProductCart(product);
+  }
+  return addProductCart(product);
 }
 
 export function clearCart() {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 // import { useNavigate } from 'react-router-dom';
 
-function DetailsOrders() {
+function FinalizeOrder() {
   const [sellers] = useState([]);
   const [seller, setSeller] = useState(0);
   const [address, setAddress] = useState('');
@@ -70,7 +70,7 @@ function DetailsOrders() {
           <input
             type="text"
             id="input-number"
-            data-testid="customer_checkout__input-addressNumber"
+            data-testid="customer_checkout__input-address-number"
             onChange={ ({ target }) => setNumber(target.value) }
           />
         </label>
@@ -86,4 +86,4 @@ function DetailsOrders() {
   );
 }
 
-export default DetailsOrders;
+export default FinalizeOrder;
