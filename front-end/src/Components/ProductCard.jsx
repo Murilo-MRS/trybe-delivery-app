@@ -8,6 +8,12 @@ export default function ProductCard(product) {
   const { id, productName, price, urlImage, forceRender } = product;
   const [quantity, setQuantity] = useState(0);
 
+  useEffect(() => {
+    const products = getProductsCart() || [];
+    const quantityProduct = products.find((p) => p.id === id)?.quantity || 0;
+    setQuantity(quantityProduct);
+  }, []);
+
   useEffect(() => addProductCart({ ...product, quantity }), [quantity]);
 
   const changeCart = async ({ target }) => {
