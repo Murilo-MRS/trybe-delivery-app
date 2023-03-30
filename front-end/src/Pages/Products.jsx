@@ -1,27 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Navbar from '../Components/Navbar';
+import Auth from '../Components/Auth';
 import ProductCard from '../Components/ProductCard';
-import { productsRequest } from '../Utils/axios';
-import { getProductsCart, getUser } from '../Utils/LocalStorage';
-import formatValues from '../Utils/normalize';
+import { getRequest } from '../Utils/axios';
+import { getProductsCart, saveTotalPrice } from '../Utils/LocalStorage';
 
 export default function Products({ history }) {
-  const [isLogged, setIsLogged] = useState(false);
   const [dataProducts, setDataProducts] = useState([]);
   const [cartProduct, setCartProducts] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [editionCount, setEditionCount] = useState(0);
 
   useEffect(() => {
-    const user = getUser();
-    if (!user || !user.token) return setIsLogged(true);
-  }, []);
-
-  useEffect(() => {
     const getProducts = async () => {
-      const products = await productsRequest('/customer/products');
+      const products = await getRequest('/customer/products');
       return setDataProducts(products);
     };
     getProducts();
@@ -33,14 +26,13 @@ export default function Products({ history }) {
   }, [editionCount]);
 
   useEffect(() => {
-    const total = cartProduct
-      .reduce((acc, { price, quantity }) => acc + (Number(price) * Number(quantity)), 0);
-    setTotalPrice(formatValues(total));
+    const total = saveTotalPrice(cartProduct);
+    setTotalPrice(total);
   }, [cartProduct]);
 
   return (
     <div>
-      {isLogged && <Redirect to="/login" />}
+      <Auth />
       <h1>Products</h1>
       <Navbar />
       {dataProducts.map(({ id, name, price, urlImage }) => (

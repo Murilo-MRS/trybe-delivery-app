@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import Button from '../Components/Button';
 import Input from '../Components/Input';
-import { userRequest, setToken } from '../Utils/axios';
+import { postRequest, setToken } from '../Utils/axios';
 import { saveUser } from '../Utils/LocalStorage';
 import verifyFields from '../Utils/validateFields';
 
@@ -30,7 +30,7 @@ function Register() {
       role: 'customer',
     };
     try {
-      const { id, ...user } = await userRequest('/register', userInfo);
+      const { id, ...user } = await postRequest('/register', userInfo);
       saveUser(user);
       setToken(user.token);
       return setIsRegistered(true);

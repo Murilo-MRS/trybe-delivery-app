@@ -1,47 +1,41 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-// import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { getRequest, postRequest } from '../Utils/axios';
+import { getUser, getProductsCart, getTotalPrice } from '../Utils/LocalStorage';
 
-function FinalizeOrder() {
-  const [sellers] = useState([]);
-  const [seller, setSeller] = useState(0);
+function FinalizeOrder({ history }) {
+  const [sellers, setSellers] = useState([]);
+  const [sellerId, setSellerId] = useState(0);
   const [address, setAddress] = useState('');
   const [number, setNumber] = useState('');
-  console.log('TESTE');
 
-  // const history = useNavigate();
-  const dispatch = useDispatch();
-  const products = JSON.parse(localStorage.getItem('cartItems') || []);
-  console.log('produtct', products);
-  const sumPrices = products.reduce((acc, curr) => (curr.price * curr.quantity) + acc, 0);
+  useEffect(() => {
+    const request = async () => {
+      const sellerRequest = await getRequest('/sellers');
+      return setSellers(sellerRequest);
+    };
+    request();
+  }, []);
 
-  // useEffect(() => {
-  //   const asyncFunction = async () => {
-  //     const { token } = JSON.parse(localStorage.getItem('user'));
-  //     const newSellers = await getSellers(token);
-  //     setSellers(newSellers);
-  //     setSeller(newSellers[0].id);
-  //   };
-  //   asyncFunction();
-  // }, []);
+  useEffect(() => {
+    setSellerId(sellers[0]?.id);
+  }, [sellers]);
 
   async function finishOrder() {
-    const { id, token } = JSON.parse(localStorage.getItem('user'));
+    const { email, token } = getUser();
+    const totalPrice = getTotalPrice().replace(',', '.');
+
     const body = {
-      user_id: id,
-      seller_id: seller,
-      status: 'Pendente',
-      delivery_address: address,
-      delivery_number: number,
-      total_price: sumPrices,
-      products,
+      email,
+      sellerId,
+      deliveryAddress: address,
+      deliveryNumber: number,
+      totalPrice: Number(totalPrice),
+      products: getProductsCart(),
     };
-    console.log(token);
-    console.log(body);
-    // const order = await createOrder({ token, body });
-    dispatch(setProducts([]));
-    // history(`/customer/orders/${order.id}`);
-    // atualizando branch
+
+    const { id } = await postRequest('/sales', body, token);
+    return history.push(`/customer/orders/${id}`);
   }
 
   return (
@@ -50,7 +44,7 @@ function FinalizeOrder() {
       <form>
         <select
           data-testid="customer_checkout__select-seller"
-          onChange={ ({ target }) => setSeller(target.value) }
+          onChange={ ({ target }) => setSellerId(target.value) }
         >
           { sellers.map(({ id, name }, index) => (
             <option key={ index } value={ id }>{ name }</option>
@@ -85,5 +79,9 @@ function FinalizeOrder() {
     </div>
   );
 }
+
+FinalizeOrder.propTypes = {
+  history: PropTypes.func,
+}.isRequired;
 
 export default FinalizeOrder;

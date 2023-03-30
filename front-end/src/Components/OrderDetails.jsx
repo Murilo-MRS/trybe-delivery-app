@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { getProductsCart, removeProductCart } from '../Utils/LocalStorage';
+import { getProductsCart,
+  removeProductCart, saveTotalPrice } from '../Utils/LocalStorage';
 import formatValues from '../Utils/normalize';
 
 function OrderDetails() {
   const [order, setOrder] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const updateCart = () => {
     const products = getProductsCart() || [];
@@ -14,10 +16,10 @@ function OrderDetails() {
     updateCart();
   }, []);
 
-  const sumPrices = order.reduce(
-    (acc, curr) => curr.price * curr.quantity + acc,
-    0,
-  );
+  useEffect(() => {
+    const total = saveTotalPrice(order);
+    setTotalPrice(total);
+  }, [order]);
 
   return (
     <div>
@@ -88,7 +90,7 @@ function OrderDetails() {
       <div>
         Total: R$
         <span data-testid="customer_checkout__element-order-total-price">
-          {formatValues(sumPrices)}
+          {totalPrice}
         </span>
       </div>
     </div>

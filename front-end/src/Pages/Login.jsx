@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Button from '../Components/Button';
 import Input from '../Components/Input';
-import { userRequest, setToken } from '../Utils/axios';
+import { postRequest, setToken } from '../Utils/axios';
 import verifyFields from '../Utils/validateFields';
 import { saveUser } from '../Utils/LocalStorage';
 
@@ -27,7 +27,7 @@ function Login({ history }) {
       password,
     };
     try {
-      const { id, ...user } = await userRequest('/login', loginInfo);
+      const { id, ...user } = await postRequest('/login', loginInfo);
       saveUser(user);
       setToken(user.token);
       return setIsLogged(true);
