@@ -1,5 +1,6 @@
 const { Sale, SaleProduct } = require('../../database/models');
 // const errorGenerator = require('../Utils/errorGenerator');
+const { getUser } = require('./User.service');
 
 const createSaleProduct = async (saleId, products) => {
   const newSaleProduct = products.map(
@@ -26,9 +27,15 @@ const createSale = async (infoSale) => {
 };
 
 const create = async (infoSale) => {
-  const { products, ...saleData } = infoSale;
+  const { products, email, ...saleData } = infoSale;
+  const userId = await getUser({ email });
 
-  const { dataValues: { id } } = await createSale(saleData);
+  const body = {
+    ...saleData,
+    userId: userId.id,
+  };
+
+  const { dataValues: { id } } = await createSale(body);
   await createSaleProduct(id, products);
 
   return id;
