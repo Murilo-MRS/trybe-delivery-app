@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import Navbar from '../Components/Navbar';
 import ProductCard from '../Components/ProductCard';
 import { productsRequest } from '../Utils/axios';
-import { getUser } from '../Utils/LocalStorage';
+import { getProductsCart, getUser } from '../Utils/LocalStorage';
 
-export default function Products() {
+export default function Products({ history }) {
   const [isLogged, setIsLogged] = useState(false);
   const [dataProducts, setDataProducts] = useState([]);
+  const [cartProduct, setCartProducts] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [editionCount, setEditionCount] = useState(0);
 
   useEffect(() => {
     const user = getUser();
@@ -22,6 +26,17 @@ export default function Products() {
     getProducts();
   }, []);
 
+  useEffect(() => {
+    const cart = getProductsCart() || [];
+    setCartProducts(cart);
+  }, [editionCount]);
+
+  useEffect(() => {
+    const total = cartProduct
+      .reduce((acc, { price, quantity }) => acc + (Number(price) * Number(quantity)), 0);
+    setTotalPrice(total.toLocaleString('pt-BR', { minimumFractionDigits: 2 }));
+  }, [cartProduct]);
+
   return (
     <div>
       {isLogged && <Redirect to="/login" />}
@@ -34,8 +49,24 @@ export default function Products() {
           productName={ name }
           price={ price }
           urlImage={ urlImage }
+          forceRender={ setEditionCount }
         />
       ))}
+      <button
+        type="button"
+        data-testid="customer_products__button-cart"
+        onClick={ () => history.push('/customer/checkout') }
+        disabled={ cartProduct.length === 0 }
+      >
+        Ver carrinho:R$
+        <span data-testid="customer_products__checkout-bottom-value">
+          {totalPrice}
+        </span>
+      </button>
     </div>
   );
 }
+
+Products.propTypes = {
+  history: PropTypes.func,
+}.isRequired;

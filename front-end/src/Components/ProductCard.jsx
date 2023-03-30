@@ -5,7 +5,7 @@ import Button from './Button';
 import { addProductCart, getProductsCart } from '../Utils/LocalStorage';
 
 export default function ProductCard(product) {
-  const { id, productName, price, urlImage } = product;
+  const { id, productName, price, urlImage, forceRender } = product;
   const [quantity, setQuantity] = useState(0);
 
   useEffect(() => addProductCart({ ...product, quantity }), [quantity]);
@@ -16,12 +16,19 @@ export default function ProductCard(product) {
       const productFromCart = products
         .find(({ id: idProd }) => idProd === id) || { ...product, quantity };
       productFromCart.quantity = quantity;
+      forceRender((prev) => prev + 1);
       return setQuantity((prev) => Number(prev) + 1);
     }
     const productFromCart = products
       .find(({ id: idProd }) => idProd === id) || { ...product, quantity };
     productFromCart.quantity = quantity;
+    forceRender((prev) => prev + 1);
     return setQuantity((prev) => Number(prev) - 1);
+  };
+
+  const handleChange = async ({ target }) => {
+    setQuantity(Number(target.value));
+    forceRender((prev) => prev + 1);
   };
 
   return (
@@ -37,9 +44,13 @@ export default function ProductCard(product) {
         style={ { width: '50px' } }
         data-testid={ `customer_products__img-card-bg-image-${id}` }
       />
-      <p data-testid={ `customer_products__element-card-price-${id}` }>
+      <p>
         R$
-        { price }
+        <span
+          data-testid={ `customer_products__element-card-price-${id}` }
+        >
+          { Number(price).toLocaleString('pt-BR', { minimumFractionDigits: 2 }) }
+        </span>
       </p>
       <Button
         onClick={ changeCart }
@@ -52,7 +63,7 @@ export default function ProductCard(product) {
         data-testid={ `customer_products__input-card-quantity-${id}` }
         type="number"
         name="input_card_quantity"
-        onChange={ ({ target: { value } }) => setQuantity(Number(value)) }
+        onChange={ handleChange }
         id={ `product-${id}` }
         min="0"
         value={ quantity }
@@ -73,4 +84,5 @@ ProductCard.propTypes = {
   price: PropTypes.number,
   productName: PropTypes.string,
   urlImage: PropTypes.string,
+  forceRender: PropTypes.func,
 }.isRequired;
