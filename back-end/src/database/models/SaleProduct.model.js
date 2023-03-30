@@ -14,14 +14,14 @@ const SalesProductsSchema = (sequelize, DataTypes) => {
     Sale.belongsToMany(Product, {
       as: 'products',
       through: SalesProducts,
-      foreignKey: 'sale_id',
-      otherKey: 'product_id',
+      foreignKey: 'saleId',
+      otherKey: 'productId',
     });
     Product.belongsToMany(Sale, {
       as: 'sales',
       through: SalesProducts,
-      foreignKey: 'product_id',
-      otherKey: 'sale_id',
+      foreignKey: 'productId',
+      otherKey: 'saleId',
     });
   };
 
