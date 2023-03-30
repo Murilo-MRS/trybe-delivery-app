@@ -7,7 +7,7 @@ import { addProductCart, getProductsCart } from '../Utils/LocalStorage';
 export default function ProductCard(product) {
   const { id, productName, price, urlImage, forceRender } = product;
   const [quantity, setQuantity] = useState(0);
-
+  // commit
   useEffect(() => {
     const products = getProductsCart() || [];
     const quantityProduct = products.find((p) => p.id === id)?.quantity || 0;
