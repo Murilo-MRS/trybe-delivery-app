@@ -41,6 +41,7 @@ function DetailsOrders() {
     // const order = await createOrder({ token, body });
     dispatch(setProducts([]));
     // history(`/customer/orders/${order.id}`);
+    // atualizando branch
   }
 
   return (
