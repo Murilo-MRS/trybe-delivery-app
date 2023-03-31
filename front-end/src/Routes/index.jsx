@@ -4,19 +4,27 @@ import Login from '../Pages/Login';
 import Register from '../Pages/Register';
 import Products from '../Pages/Products';
 import Checkout from '../Pages/Checkout';
-/* import Auth from '../Components/Auth'; */
+import Auth from '../Components/Auth';
 
 function Routes() {
   return (
     <Switch>
-      <Route path="/login" component={ Login } />
+      <Route path="/customer/orders">
+        <Auth />
+      </Route>
+      <Route path="/customer/checkout">
+        <Auth />
+        <Checkout />
+      </Route>
+      <Route path="/customer/products">
+        <Auth />
+        <Products />
+      </Route>
       <Route path="/register" component={ Register } />
-      {/*       <Route path="/" component={ Auth } /> */}
-      <Route path="/customer/products" component={ Products } />
+      <Route path="/login" component={ Login } />
       <Route exact path="/">
         <Redirect to="/login" />
       </Route>
-      <Route path="/customer/checkout" component={ Checkout } />
     </Switch>
   );
 }
