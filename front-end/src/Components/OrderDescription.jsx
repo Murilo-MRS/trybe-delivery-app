@@ -3,7 +3,7 @@ import { getProductsCart,
   removeProductCart, saveTotalPrice } from '../Utils/LocalStorage';
 import formatValues from '../Utils/normalize';
 
-function OrderDetails() {
+function OrderDescription() {
   const [order, setOrder] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -97,4 +97,4 @@ function OrderDetails() {
   );
 }
 
-export default OrderDetails;
+export default OrderDescription;

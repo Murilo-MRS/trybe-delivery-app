@@ -27,7 +27,7 @@ function Login({ history }) {
       password,
     };
     try {
-      const { id, ...user } = await postRequest('/login', loginInfo);
+      const user = await postRequest('/login', loginInfo);
       saveUser(user);
       setToken(user.token);
       return setIsLogged(true);

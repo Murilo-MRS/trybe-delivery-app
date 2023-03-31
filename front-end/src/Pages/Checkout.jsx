@@ -1,16 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FinalizeOrder from '../Components/FinalizeOrder';
-import OrderDetails from '../Components/OrderDetails';
+import OrderDescription from '../Components/OrderDescription';
 import Navbar from '../Components/Navbar';
-import Auth from '../Components/Auth';
 
 function Checkout({ history }) {
   return (
     <main>
-      <Auth />
       <Navbar />
-      <OrderDetails />
+      <OrderDescription />
       <FinalizeOrder history={ history } />
     </main>
   );
