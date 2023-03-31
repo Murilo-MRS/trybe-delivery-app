@@ -22,4 +22,11 @@ export const getRequest = async (endpoint) => {
   return data;
 };
 
+export const patchRequest = async (endpoint, body) => {
+  const { token } = getUser() || { token: '' };
+  setToken(token);
+  const { data } = await api.patch(endpoint, body);
+  return data;
+};
+
 export default api;

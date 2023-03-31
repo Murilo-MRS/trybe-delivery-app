@@ -22,11 +22,11 @@ function FinalizeOrder({ history }) {
   }, [sellers]);
 
   async function finishOrder() {
-    const { email } = getUser();
+    const { id: userId } = getUser();
     const totalPrice = getTotalPrice().replace(',', '.');
 
     const body = {
-      email,
+      userId,
       sellerId,
       deliveryAddress: address,
       deliveryNumber: number,

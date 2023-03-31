@@ -10,7 +10,6 @@ function MyOrders() {
 
   useEffect(() => {
     const { id } = getUser();
-    console.log(id);
     const request = async () => {
       const response = await getRequest(`/sales/${id}`);
       setOrders(response);
