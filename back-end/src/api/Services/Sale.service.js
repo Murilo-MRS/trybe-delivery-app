@@ -1,6 +1,5 @@
-const { Sale, SaleProduct } = require('../../database/models');
-// const errorGenerator = require('../Utils/errorGenerator');
-const { getUser } = require('./User.service');
+const { Sale, SaleProduct, Product, User } = require('../../database/models');
+const errorGenerator = require('../Utils/errorGenerator');
 
 const createSaleProduct = async (saleId, products) => {
   const newSaleProduct = products.map(
@@ -27,12 +26,10 @@ const createSale = async (infoSale) => {
 };
 
 const create = async (infoSale) => {
-  const { products, email, ...saleData } = infoSale;
-  const userId = await getUser({ email });
+  const { products, ...saleData } = infoSale;
 
   const body = {
     ...saleData,
-    userId: userId.id,
   };
 
   const { dataValues: { id } } = await createSale(body);
@@ -46,9 +43,35 @@ const getAllByUser = async (userId) => {
   return orders;
 };
 
+const changeStatus = async (id, status) => {
+  const listStatus = ['Pendente', 'Preparando', 'Em trânsito', 'Entregue'];
+  const sale = await Sale.findByPk(id, { raw: true });
+  if (!sale) throw errorGenerator(404, 'Sale not found');
+  const newStatus = await Sale
+  .update({ status: listStatus[status - 1] }, { where: { id } });
+  return newStatus;
+};
+
+const getSaleById = async (id) => {
+  const sale = await Sale.findOne(
+  {
+    include: [
+      { model: User, as: 'seller', attributes: ['name'] },
+      { model: Product, as: 'products' },
+
+  ], 
+    where: { id } }, 
+    { raw: true },
+  );
+
+  return sale;
+};
+
 module.exports = {
   create,
   createSale,
   createSaleProduct,
   getAllByUser,
+  getSaleById,
+  changeStatus,
 };

@@ -18,8 +18,23 @@ const getOrdersByUser = async (req, res) => {
   return res.status(200).json(orders);
 };
 
+const getSaleById = async (req, res) => {
+  const { id } = req.params;
+  const sale = await saleService.getSaleById(id);
+  return res.status(200).json(sale);
+};
+
+const changeStatus = async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+  const sale = await saleService.changeStatus(id, status);
+  return res.status(201).json(sale);
+};
+
 module.exports = {
   getAll,
   createSale,
   getOrdersByUser,
+  getSaleById,
+  changeStatus,
 };
