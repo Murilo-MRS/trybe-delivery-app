@@ -30,7 +30,7 @@ function Register() {
       role: 'customer',
     };
     try {
-      const { id, ...user } = await postRequest('/register', userInfo);
+      const user = await postRequest('/register', userInfo);
       saveUser(user);
       setToken(user.token);
       return setIsRegistered(true);

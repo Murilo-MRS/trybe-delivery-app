@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Navbar from '../Components/Navbar';
-import Auth from '../Components/Auth';
 import ProductCard from '../Components/ProductCard';
 import { getRequest } from '../Utils/axios';
 import { getProductsCart, saveTotalPrice } from '../Utils/LocalStorage';
@@ -32,7 +31,6 @@ export default function Products({ history }) {
 
   return (
     <div>
-      <Auth />
       <h1>Products</h1>
       <Navbar />
       {dataProducts.map(({ id, name, price, urlImage }) => (

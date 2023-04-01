@@ -3,16 +3,16 @@ import { Redirect } from 'react-router-dom';
 import { getUser } from '../Utils/LocalStorage';
 
 export default function Auth() {
-  const [isLogged, setIsLogged] = useState(false);
+  const [isNotLogged, setIsNotLogged] = useState(false);
 
   useEffect(() => {
     const user = getUser();
-    if (!user || !user.token) return setIsLogged(true);
+    if (!user || !user.token) return setIsNotLogged(true);
   }, []);
 
   return (
     <div>
-      {isLogged && <Redirect to="/login" />}
+      {isNotLogged ? <Redirect to="/login" /> : <Redirect to="/customer/products" />}
     </div>
   );
 }
