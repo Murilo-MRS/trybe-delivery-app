@@ -22,11 +22,11 @@ function FinalizeOrder({ history }) {
   }, [sellers]);
 
   async function finishOrder() {
-    const { email, token } = getUser();
+    const { id: userId } = getUser();
     const totalPrice = getTotalPrice().replace(',', '.');
 
     const body = {
-      email,
+      userId,
       sellerId,
       deliveryAddress: address,
       deliveryNumber: number,
@@ -34,7 +34,7 @@ function FinalizeOrder({ history }) {
       products: getProductsCart(),
     };
 
-    const { id } = await postRequest('/sales', body, token);
+    const { id } = await postRequest('/sales', body);
     return history.push(`/customer/orders/${id}`);
   }
 
