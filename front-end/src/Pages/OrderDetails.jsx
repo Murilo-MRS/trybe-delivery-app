@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Navbar from '../Components/Navbar';
 import OrderDescription from '../Components/OrderDescription';
 import { getRequest, patchRequest } from '../Utils/axios';
-import { formatDate } from '../Utils/normalize';
+import formatValues, { formatDate } from '../Utils/normalize';
 
 function OrderDetails({ history, match }) {
   const { params: { id } } = match;
@@ -29,7 +29,7 @@ function OrderDetails({ history, match }) {
       setSellerName(name);
       setDate(formatDate(saleDate));
       setStatus(currentStatus);
-      return setTotalPrice(tp);
+      return setTotalPrice(formatValues(tp));
     };
     request();
   }, []);

@@ -23,7 +23,7 @@ function OrderDescription({ history, orders, totalPrice, updateCart }) {
           </tr>
         </thead>
         <tbody>
-          {orders.map(({ name: productName, quantity, price, id }, i) => (
+          {orders.map(({ name, quantity, price, id, productName }, i) => (
             <tr key={ i }>
               <td
                 data-testid={ `customer_${path}__element-order-table-item-number-${i}` }
@@ -33,7 +33,7 @@ function OrderDescription({ history, orders, totalPrice, updateCart }) {
               <td
                 data-testid={ `customer_${path}__element-order-table-name-${i}` }
               >
-                {productName}
+                { productName || name }
               </td>
               <td
                 data-testid={ `customer_${path}__element-order-table-quantity-${i}` }
@@ -79,7 +79,7 @@ function OrderDescription({ history, orders, totalPrice, updateCart }) {
       <div>
         Total: R$
         <span data-testid={ `customer_${path}__element-order-total-price` }>
-          {formatValues(totalPrice)}
+          {totalPrice}
         </span>
       </div>
     </div>
