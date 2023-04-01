@@ -50,7 +50,7 @@ function OrderDetails({ history, match }) {
           Pedido:
           {' '}
           <span
-            data-testid={ `${od}__element-order-details-label-order-${id}` }
+            data-testid={ `${od}__element-order-details-label-order-id` }
           >
             {id}
           </span>
@@ -59,26 +59,27 @@ function OrderDetails({ history, match }) {
           Vendedor:
           {' '}
           <span
-            data-testeid={ `${od}__element-order-details-label-seller-name` }
+            data-testid={ `${od}__element-order-details-label-seller-name` }
           >
             {sellerName}
           </span>
         </p>
         <p
-          data-testeid={ `${od}__element-order-details-label-order-date` }
+          data-testid={ `${od}__element-order-details-label-order-date` }
         >
           {date}
         </p>
         <p
-          data-testeid={ `${od}__element-order-details-label-delivery-status${id}` }
+          data-testid={ `${od}__element-order-details-label-delivery-status${id}` }
         >
           {status}
         </p>
         <button
           type="button"
           onClick={ changeStatus }
-          data-testeid={ `${od}__button-delivery-check` }
-          disabled={ status === 'Entregue' }
+          data-testid="customer_order_details__button-delivery-check"
+          disabled
+
         >
           Marcar como entregue
         </button>

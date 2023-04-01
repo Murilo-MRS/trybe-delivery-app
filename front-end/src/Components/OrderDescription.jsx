@@ -78,8 +78,8 @@ function OrderDescription({ history, orders, totalPrice, updateCart }) {
       </table>
       <div>
         Total: R$
-        <span data-testid="customer_checkout__element-order-total-price">
-          {totalPrice}
+        <span data-testid={ `customer_${path}__element-order-total-price` }>
+          {formatValues(totalPrice)}
         </span>
       </div>
     </div>
