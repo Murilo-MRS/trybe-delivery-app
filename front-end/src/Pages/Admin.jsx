@@ -3,11 +3,12 @@ import Button from '../Components/Button';
 import Input from '../Components/Input';
 import Navbar from '../Components/Navbar';
 import UserTable from '../Components/UserTable';
-import { postRequest } from '../Utils/axios';
+import { getRequest, postRequest } from '../Utils/axios';
 import verifyFields from '../Utils/validateFields';
 
 function Admin() {
   const MIN_LENGTH_NAME = 12;
+  const [users, setUsers] = useState([]);
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,6 +30,15 @@ function Admin() {
     setIsDisable(!verify || !verifyName);
   }, [email, password, userName]);
 
+  useEffect(() => {
+    const request = async () => {
+      const response = await getRequest('/users');
+
+      return setUsers(response);
+    };
+    return request();
+  }, []);
+
   const handleRegister = async () => {
     const userInfo = {
       name: userName,
@@ -37,8 +47,9 @@ function Admin() {
       role: userRole,
     };
     try {
-      const user = await postRequest('/admin/register', userInfo);
-      return user;
+      await postRequest('/admin/register', userInfo);
+      const response = await getRequest('/users');
+      return setUsers(response);
     } catch (error) {
       setErrorMessage(error.response.data.message);
       setIsIncorrectValues(true);
@@ -109,7 +120,10 @@ function Admin() {
           </p>
         )
       }
-      <UserTable />
+      <UserTable
+        users={ users }
+        updateUsers={ setUsers }
+      />
     </div>
   );
 }

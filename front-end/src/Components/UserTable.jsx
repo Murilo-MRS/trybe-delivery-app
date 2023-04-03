@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { getRequest } from '../Utils/axios';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { deleteRequest, getRequest } from '../Utils/axios';
 
-export default function UserTable() {
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    const request = async () => {
-      const response = await getRequest('/users');
-      return setUsers(response);
-    };
-    return request();
-  }, []);
+export default function UserTable({ users, updateUsers }) {
+  const deleteUser = async (id) => {
+    await deleteRequest(`/admin/delete/${id}`);
+    const response = await getRequest('/users');
+    return updateUsers(response);
+  };
 
   return (
     <div>
@@ -37,22 +34,31 @@ export default function UserTable() {
         <tbody>
           {users.map((user, index) => (
             <tr key={ index }>
-              <td>
+              <td
+                data-testid={ `admin_manage__element-user-table-item-number-${index}` }
+              >
                 {index + 1}
               </td>
-              <td>
+              <td
+                data-testid={ `admin_manage__element-user-table-name-${index}` }
+              >
                 {user.name}
               </td>
-              <td>
+              <td
+                data-testid={ `admin_manage__element-user-table-email-${index}` }
+              >
                 {user.email}
               </td>
-              <td>
+              <td
+                data-testid={ `admin_manage__element-user-table-role-${index}` }
+              >
                 {user.role}
               </td>
               <td>
                 <button
                   type="button"
-                  onClick={ () => (user.id) }
+                  onClick={ async () => deleteUser(user.id) }
+                  data-testid={ `admin_manage__element-user-table-remove-${index}` }
                 >
                   Excluir
                 </button>
@@ -64,3 +70,8 @@ export default function UserTable() {
     </div>
   );
 }
+
+UserTable.propTypes = {
+  updateUsers: PropTypes.func,
+  users: PropTypes.array,
+}.isRequired;
