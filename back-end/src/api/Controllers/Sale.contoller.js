@@ -11,10 +11,15 @@ const createSale = async (req, res) => {
   return res.status(201).json({ id });
 };
 
-const getOrdersByUser = async (req, res) => {
+const getOrdersByCustomer = async (req, res) => {
   const { id } = req.params;
-  const orders = await saleService.getAllByUser(id);
+  const orders = await saleService.getAllByUser(id, 'customer');
+  return res.status(200).json(orders);
+};
 
+const getOrdersBySeller = async (req, res) => {
+  const { id } = req.params;
+  const orders = await saleService.getAllByUser(id, 'seller');
   return res.status(200).json(orders);
 };
 
@@ -34,7 +39,8 @@ const changeStatus = async (req, res) => {
 module.exports = {
   getAll,
   createSale,
-  getOrdersByUser,
+  getOrdersByCustomer,
+  getOrdersBySeller,
   getSaleById,
   changeStatus,
 };
