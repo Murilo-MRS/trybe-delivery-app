@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Button from '../Components/Button';
 import Input from '../Components/Input';
 import { postRequest, setToken } from '../Utils/axios';
-import verifyFields from '../Utils/validateFields';
+import verifyFields, { getUserRoute } from '../Utils/validateFields';
 import { saveUser } from '../Utils/LocalStorage';
 
 function Login({ history }) {
@@ -15,6 +15,7 @@ function Login({ history }) {
   const [isIncorrectValues, setIsIncorrectValues] = useState(false);
   const [isDisable, setIsDisable] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+  const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
     const verify = verifyFields(email, password);
@@ -29,6 +30,7 @@ function Login({ history }) {
     try {
       const user = await postRequest('/login', loginInfo);
       saveUser(user);
+      setUserRole(user.role);
       setToken(user.token);
       return setIsLogged(true);
     } catch (error) {
@@ -79,7 +81,7 @@ function Login({ history }) {
           </p>
         )
       }
-      {isLogged && <Redirect to="/customer/products" />}
+      {isLogged && <Redirect to={ getUserRoute(userRole) } />}
     </div>
   );
 }

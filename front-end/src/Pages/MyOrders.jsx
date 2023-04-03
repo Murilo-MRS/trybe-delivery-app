@@ -7,12 +7,14 @@ import { getRequest } from '../Utils/axios';
 
 function MyOrders() {
   const [orders, setOrders] = useState([]);
+  const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
-    const { id } = getUser();
+    const { id, role } = getUser();
     const request = async () => {
-      const response = await getRequest(`/sales/${id}`);
-      setOrders(response);
+      const response = await getRequest(`/${role}/${id}/sales`);
+      setUserRole(role);
+      return setOrders(response);
     };
     request();
   }, []);
@@ -27,6 +29,9 @@ function MyOrders() {
             status={ e.status }
             saleDate={ e.saleDate }
             totalPrice={ e.totalPrice }
+            role={ userRole }
+            address={ e.deliveryAddress }
+            numberHouse={ e.deliveryNumber }
           />
         ))
       }

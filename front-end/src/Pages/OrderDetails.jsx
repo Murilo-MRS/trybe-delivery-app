@@ -22,7 +22,7 @@ function OrderDetails({ history, match }) {
         saleDate,
         status: currentStatus,
         totalPrice: tp,
-      } = await getRequest(`/salesDetails/${id}`);
+      } = await getRequest(`/sales/${id}`);
       const formatedArray = arrayProducts
         .map(({ SaleProduct: { quantity }, ...rest }) => ({ ...rest, quantity }));
       setProducts(formatedArray);
@@ -36,7 +36,7 @@ function OrderDetails({ history, match }) {
 
   const changeStatus = () => {
     const request = async () => {
-      await patchRequest(`/salesDetails/${id}`, { status: 4 });
+      await patchRequest(`/sales/${id}`, { status: 4 });
       return setStatus('Entregue');
     };
     request();
