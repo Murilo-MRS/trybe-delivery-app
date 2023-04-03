@@ -38,15 +38,16 @@ const create = async (infoSale) => {
   return id;
 };
 
-const getAllByUser = async (userId) => {
-  const orders = await Sale.findAll({ where: { userId } }, { raw: true });
+const getAllByUser = async (id, type) => {
+  const filter = type === 'customer' ? 'userId' : 'sellerId';
+  const orders = await Sale.findAll({ where: { [filter]: id } }, { raw: true });
   return orders;
 };
 
 const changeStatus = async (id, status) => {
-  const listStatus = ['Pendente', 'Preparando', 'Em trânsito', 'Entregue'];
+  const listStatus = ['Pendente', 'Preparando', 'Em Trânsito', 'Entregue'];
   const sale = await Sale.findByPk(id, { raw: true });
-  if (!sale) throw errorGenerator(404, 'Sale not found');
+  if (!sale) errorGenerator(404, 'Sale not found');
   const newStatus = await Sale
   .update({ status: listStatus[status - 1] }, { where: { id } });
   return newStatus;
