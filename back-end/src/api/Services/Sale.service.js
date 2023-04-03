@@ -45,7 +45,7 @@ const getAllByUser = async (id, type) => {
 };
 
 const changeStatus = async (id, status) => {
-  const listStatus = ['Pendente', 'Preparando', 'Em trânsito', 'Entregue'];
+  const listStatus = ['Pendente', 'Preparando', 'Em Trânsito', 'Entregue'];
   const sale = await Sale.findByPk(id, { raw: true });
   if (!sale) errorGenerator(404, 'Sale not found');
   const newStatus = await Sale

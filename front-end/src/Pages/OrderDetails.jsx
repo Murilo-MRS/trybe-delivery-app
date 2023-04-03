@@ -7,13 +7,17 @@ import { getRequest, patchRequest } from '../Utils/axios';
 import formatValues, { formatDate } from '../Utils/normalize';
 
 function OrderDetails({ history, match }) {
-  const { params: { id } } = match;
   const [products, setProducts] = useState([]);
   const [sellerName, setSellerName] = useState('');
   const [date, setDate] = useState('');
   const [status, setStatus] = useState('');
   const [totalPrice, setTotalPrice] = useState(0);
-  const od = 'customer_order_details';
+
+  const { params: { id }, path } = match;
+  const arrayStatus = ['Pendente', 'Preparando', 'Em Trânsito', 'Entregue'];
+  const role = path.split('/')[1];
+  const od = `${role}_order_details`;
+
   useEffect(() => {
     const request = async () => {
       const {
@@ -34,10 +38,10 @@ function OrderDetails({ history, match }) {
     request();
   }, []);
 
-  const changeStatus = () => {
+  const changeStatus = (statusSale) => {
     const request = async () => {
-      await patchRequest(`/sales/${id}`, { status: 4 });
-      return setStatus('Entregue');
+      await patchRequest(`/sales/${id}`, { status: Number(statusSale) });
+      return setStatus(arrayStatus[Number(statusSale) - 1]);
     };
     request();
   };
@@ -55,15 +59,17 @@ function OrderDetails({ history, match }) {
             {id}
           </span>
         </p>
-        <p>
-          Vendedor:
-          {' '}
-          <span
-            data-testid={ `${od}__element-order-details-label-seller-name` }
-          >
-            {sellerName}
-          </span>
-        </p>
+        { role === 'customer' && (
+          <p>
+            Vendedor:
+            {' '}
+            <span
+              data-testid={ `${od}__element-order-details-label-seller-name` }
+            >
+              {sellerName}
+            </span>
+          </p>
+        )}
         <p
           data-testid={ `${od}__element-order-details-label-order-date` }
         >
@@ -74,15 +80,38 @@ function OrderDetails({ history, match }) {
         >
           {status}
         </p>
-        <button
-          type="button"
-          onClick={ changeStatus }
-          data-testid="customer_order_details__button-delivery-check"
-          disabled
+        {role === 'customer' && (
+          <button
+            type="button"
+            onClick={ () => changeStatus('4') }
+            data-testid="customer_order_details__button-delivery-check"
+            disabled={ status !== arrayStatus[2] }
 
-        >
-          Marcar como entregue
-        </button>
+          >
+            Marcar como entregue
+          </button>
+        )}
+        {role === 'seller' && (
+          <div>
+            <button
+              type="button"
+              onClick={ () => changeStatus('2') }
+              data-testid="seller_order_details__button-preparing-check"
+              disabled={ status !== arrayStatus[0] }
+            >
+              PREPARAR PEDIDO
+            </button>
+
+            <button
+              type="button"
+              onClick={ () => changeStatus('3') }
+              data-testid="seller_order_details__button-dispatch-check"
+              disabled={ status !== arrayStatus[1] }
+            >
+              SAIU PARA A ENTREGA
+            </button>
+          </div>
+        )}
       </div>
       <OrderDescription
         history={ history }
