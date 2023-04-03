@@ -1,20 +1,18 @@
 const { verifyToken, decodeToken } = require('../Utils/jwt');
 
-const validation = (token, res) => {
+const ValidToken = (req, res, next) => {
+  const token = req.header('Authorization');
   if (!token) return res.status(401).json({ message: 'Token not found' });
   const isValid = verifyToken(token);
   if (!isValid) return res.status(401).json({ message: 'Invalid Token' });
-};
-
-const ValidToken = (req, res, next) => {
-  const token = req.header('Authorization');
-  validation(token, res);
   next();
 };
 
 const validTokenAdmin = (req, res, next) => {
   const token = req.header('Authorization');
-  validation(token, res);
+  if (!token) return res.status(401).json({ message: 'Token not found' });
+  const isValid = verifyToken(token);
+  if (!isValid) return res.status(401).json({ message: 'Invalid Token' });
   const { role } = decodeToken(token);
   if (role !== 'administrator') return res.status(403).json({ message: 'Forbidden' });
   next();
