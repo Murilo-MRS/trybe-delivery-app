@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Button from '../Components/Button';
 import Input from '../Components/Input';
 import Navbar from '../Components/Navbar';
+import UserTable from '../Components/UserTable';
 import { postRequest } from '../Utils/axios';
 import verifyFields from '../Utils/validateFields';
 
@@ -36,7 +37,7 @@ function Admin() {
       role: userRole,
     };
     try {
-      const user = await postRequest('/register', userInfo);
+      const user = await postRequest('/admin/register', userInfo);
       return user;
     } catch (error) {
       setErrorMessage(error.response.data.message);
@@ -108,7 +109,7 @@ function Admin() {
           </p>
         )
       }
-
+      <UserTable />
     </div>
   );
 }

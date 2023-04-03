@@ -17,6 +17,11 @@ const getUserByRole = async (role) => {
   return user;
 };
 
+const getAll = async () => {
+  const users = await User.findAll();
+  return users;
+};
+
 const login = async (loginInfo) => {
   validatorFieldsLogin(loginInfo);
   const { email, password } = loginInfo;
@@ -65,4 +70,5 @@ module.exports = {
   register,
   getUserByRole,
   getUser,
+  getAll,
 };
