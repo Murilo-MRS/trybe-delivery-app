@@ -40,12 +40,12 @@ export function managerProductCart(product) {
 }
 
 export function clearCart() {
-  localStorage.setItem(CART_ITEMS, JSON.stringify([]));
+  return localStorage.setItem(CART_ITEMS, JSON.stringify([]));
 }
 
 export function logout() {
   localStorage.removeItem(CART_ITEMS);
-  localStorage.removeItem(USER);
+  return localStorage.removeItem(USER);
 }
 
 export function getUser() {
@@ -54,5 +54,5 @@ export function getUser() {
 }
 
 export function saveUser(user) {
-  localStorage.setItem(USER, JSON.stringify(user));
+  return localStorage.setItem(USER, JSON.stringify(user));
 }
