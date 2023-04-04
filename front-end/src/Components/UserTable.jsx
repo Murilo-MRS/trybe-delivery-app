@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { deleteRequest, getRequest } from '../Utils/axios';
 
-export default function UserTable({ users, updateUsers }) {
+export default function UserTable({ users, updateUsers, filterUser }) {
   const deleteUser = async (id) => {
     await deleteRequest(`/admin/delete/${id}`);
     const response = await getRequest('/users');
-    return updateUsers(response);
+    return updateUsers(filterUser(response));
   };
 
   return (

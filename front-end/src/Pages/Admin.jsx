@@ -5,6 +5,7 @@ import Navbar from '../Components/Navbar';
 import UserTable from '../Components/UserTable';
 import { getRequest, postRequest } from '../Utils/axios';
 import verifyFields from '../Utils/validateFields';
+import { getUser } from '../Utils/LocalStorage';
 
 function Admin() {
   const MIN_LENGTH_NAME = 12;
@@ -30,11 +31,16 @@ function Admin() {
     setIsDisable(!verify || !verifyName);
   }, [email, password, userName]);
 
+  const filterOwnUser = (usersArray) => {
+    const ownUser = getUser();
+    return usersArray.filter(({ id }) => id !== ownUser.id);
+  };
+
   useEffect(() => {
     const request = async () => {
       const response = await getRequest('/users');
 
-      return setUsers(response);
+      return setUsers(filterOwnUser(response));
     };
     return request();
   }, []);
@@ -123,6 +129,7 @@ function Admin() {
       <UserTable
         users={ users }
         updateUsers={ setUsers }
+        filterUser={ filterOwnUser }
       />
     </div>
   );
