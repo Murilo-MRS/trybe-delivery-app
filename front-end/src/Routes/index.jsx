@@ -7,6 +7,7 @@ import Checkout from '../Pages/Checkout';
 import Auth from '../Components/Auth';
 import MyOrders from '../Pages/MyOrders';
 import OrderDetails from '../Pages/OrderDetails';
+import Admin from '../Pages/Admin';
 
 function Routes() {
   const authDetails = (props) => (
@@ -46,6 +47,15 @@ function Routes() {
           <>
             <Auth />
             <Checkout { ...props } />
+          </>
+        ) }
+      />
+      <Route
+        path="/admin/manage"
+        render={ (props) => (
+          <>
+            <Auth />
+            <Admin { ...props } />
           </>
         ) }
       />
