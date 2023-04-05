@@ -2,11 +2,40 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import Button from '../Components/Button';
 import Input from '../Components/Input';
 import { postRequest, setToken } from '../Utils/axios';
 import verifyFields, { getUserRoute } from '../Utils/validateFields';
 import { saveUser } from '../Utils/LocalStorage';
+
+const ContainerLogin = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  gap: 8px;
+  img {
+    width: 22vw;
+    min-width: 200px
+  };
+  form {
+    min-width: 220px;
+    min-height: 220px;
+    width: 20vw;
+    height: 22vh;
+    background-color: #495057;
+    border-radius: 4px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  p {
+    color: white;
+  }
+`;
 
 function Login({ history }) {
   const [email, setEmail] = useState('');
@@ -40,7 +69,8 @@ function Login({ history }) {
   };
 
   return (
-    <div>
+    <ContainerLogin>
+      <img src="http://localhost:3001/images/Logo.svg" alt="Logo" width="300px" />
       <form>
         <Input
           type="email"
@@ -54,7 +84,7 @@ function Login({ history }) {
         <Input
           type="password"
           placeholder="*******"
-          label="Password"
+          label="Senha"
           onChange={ ({ target: { value } }) => setPassword(value) }
           dataTestId="common_login__input-password"
           id="password-input"
@@ -62,15 +92,21 @@ function Login({ history }) {
         />
         <Button
           onClick={ handleLogin }
-          text="Login"
+          text="Entrar"
           dataTestId="common_login__button-login"
           disabled={ isDisable }
+          textColor="white"
+          backgroundColor="#995bd5"
+          borderColor="1px solid black"
         />
         <Button
           onClick={ () => history.push('/register') }
-          text="Ainda não tenho conta"
+          text="Cadastre-se"
           dataTestId="common_login__button-register"
           disabled={ false }
+          textColor="black"
+          backgroundColor="#80c423"
+          borderColor="2px solid black"
         />
       </form>
       {
@@ -82,7 +118,7 @@ function Login({ history }) {
         )
       }
       {isLogged && <Redirect to={ getUserRoute(userRole) } />}
-    </div>
+    </ContainerLogin>
   );
 }
 

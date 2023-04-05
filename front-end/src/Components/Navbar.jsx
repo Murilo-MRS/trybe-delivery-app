@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { getUser, logout } from '../Utils/LocalStorage';
-import Logo from './Logo';
 
 export default function Navbar() {
   const [userName, setUserName] = useState('');
@@ -15,7 +14,6 @@ export default function Navbar() {
 
   return (
     <nav>
-      <Logo />
       {userRole === 'customer' && (
         <NavLink
           to="/customer/products"

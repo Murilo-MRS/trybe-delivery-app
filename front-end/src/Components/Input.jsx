@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import LabelInput from './CSS/LabelInput.styled';
 
 function Input({ type, label, placeholder, id, dataTestId, onChange, value }) {
   return (
-    <label htmlFor={ id }>
+    <LabelInput htmlFor={ id }>
       {label}
       <input
         type={ type }
@@ -14,7 +15,7 @@ function Input({ type, label, placeholder, id, dataTestId, onChange, value }) {
         value={ value }
         name={ id }
       />
-    </label>
+    </LabelInput>
   );
 }
 
