@@ -5,6 +5,7 @@ import formatValues from '../Utils/normalize';
 
 function OrderDescription({ history, orders, totalPrice, updateCart }) {
   const { location: { pathname } } = history;
+  const role = pathname.split('/')[1];
   const path = pathname.includes('checkout') ? 'checkout' : 'order_details';
 
   return (
@@ -26,24 +27,24 @@ function OrderDescription({ history, orders, totalPrice, updateCart }) {
           {orders.map(({ name, quantity, price, id, productName }, i) => (
             <tr key={ i }>
               <td
-                data-testid={ `customer_${path}__element-order-table-item-number-${i}` }
+                data-testid={ `${role}_${path}__element-order-table-item-number-${i}` }
               >
                 {i + 1}
               </td>
               <td
-                data-testid={ `customer_${path}__element-order-table-name-${i}` }
+                data-testid={ `${role}_${path}__element-order-table-name-${i}` }
               >
                 { productName || name }
               </td>
               <td
-                data-testid={ `customer_${path}__element-order-table-quantity-${i}` }
+                data-testid={ `${role}_${path}__element-order-table-quantity-${i}` }
               >
                 {quantity}
               </td>
               <td>
                 R$
                 <span
-                  data-testid={ `customer_${path}__element-order-table-unit-price-${i}` }
+                  data-testid={ `${role}_${path}__element-order-table-unit-price-${i}` }
                 >
                   {formatValues(price)}
                 </span>
@@ -51,7 +52,7 @@ function OrderDescription({ history, orders, totalPrice, updateCart }) {
               <td>
                 R$
                 <span
-                  data-testid={ `customer_${path}__element-order-table-sub-total-${i}` }
+                  data-testid={ `${role}_${path}__element-order-table-sub-total-${i}` }
                 >
                   {formatValues(Number(price) * Number(quantity))}
                 </span>
@@ -59,7 +60,7 @@ function OrderDescription({ history, orders, totalPrice, updateCart }) {
               {
                 path === 'checkout' && (
                   <td
-                    data-testid={ `customer_checkout__element-order-table-remove-${i}` }
+                    data-testid={ `${role}_checkout__element-order-table-remove-${i}` }
                   >
                     <button
                       type="button"
@@ -78,7 +79,7 @@ function OrderDescription({ history, orders, totalPrice, updateCart }) {
       </table>
       <div>
         Total: R$
-        <span data-testid={ `customer_${path}__element-order-total-price` }>
+        <span data-testid={ `${role}_${path}__element-order-total-price` }>
           {totalPrice}
         </span>
       </div>

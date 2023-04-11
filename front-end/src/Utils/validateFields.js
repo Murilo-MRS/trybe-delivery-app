@@ -4,4 +4,17 @@ const verifyFields = (email, password) => {
   return regexEmail.test(email) && password.length >= MIN_LENGTH;
 };
 
+export const getUserRoute = (userRole) => {
+  if (userRole === 'customer') {
+    return '/customer/products';
+  }
+  if (userRole === 'seller') {
+    return '/seller/orders';
+  }
+  if (userRole === 'administrator') {
+    return '/admin/manage';
+  }
+  return '/login';
+};
+
 export default verifyFields;

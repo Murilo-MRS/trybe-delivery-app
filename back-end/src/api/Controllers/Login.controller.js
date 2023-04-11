@@ -17,8 +17,22 @@ const getSellers = async (req, res) => {
   return res.status(200).json(sellers);
 };
 
+const getAll = async (req, res) => {
+  const users = await userService.getAll();
+  return res.status(200).json(users);
+};
+
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  await userService.deleteUser(Number(id));
+  return res.status(204).end();
+};
+
 module.exports = {
   login,
   register,
   getSellers,
+  getAll,
+  deleteUser,
 };

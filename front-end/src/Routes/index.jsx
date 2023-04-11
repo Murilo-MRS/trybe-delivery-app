@@ -7,27 +7,39 @@ import Checkout from '../Pages/Checkout';
 import Auth from '../Components/Auth';
 import MyOrders from '../Pages/MyOrders';
 import OrderDetails from '../Pages/OrderDetails';
+import Admin from '../Pages/Admin';
 
 function Routes() {
+  const authDetails = (props) => (
+    <>
+      <Auth />
+      <OrderDetails { ...props } />
+    </>
+  );
+
+  const authMyOrders = (props) => (
+    <>
+      <Auth />
+      <MyOrders { ...props } />
+    </>
+  );
   return (
     <Switch>
       <Route
+        path="/seller/orders/:id"
+        render={ authDetails }
+      />
+      <Route
+        path="/seller/orders"
+        render={ authMyOrders }
+      />
+      <Route
         path="/customer/orders/:id"
-        render={ (props) => (
-          <>
-            <Auth />
-            <OrderDetails { ...props } />
-          </>
-        ) }
+        render={ authDetails }
       />
       <Route
         path="/customer/orders"
-        render={ (props) => (
-          <>
-            <Auth />
-            <MyOrders { ...props } />
-          </>
-        ) }
+        render={ authMyOrders }
       />
       <Route
         path="/customer/checkout"
@@ -35,6 +47,15 @@ function Routes() {
           <>
             <Auth />
             <Checkout { ...props } />
+          </>
+        ) }
+      />
+      <Route
+        path="/admin/manage"
+        render={ (props) => (
+          <>
+            <Auth />
+            <Admin { ...props } />
           </>
         ) }
       />

@@ -12,9 +12,23 @@ const getUser = async (param) => {
   return user;
 };
 
+const deleteUser = async (id) => {
+  const user = await getUser({ id });
+  
+  if (!user) {
+    errorGenerator(404, 'Not found');
+  }
+  return User.destroy({ where: { id } });
+};
+
 const getUserByRole = async (role) => {
   const user = await User.findAll({ where: { role } });
   return user;
+};
+
+const getAll = async () => {
+  const users = await User.findAll();
+  return users;
 };
 
 const login = async (loginInfo) => {
@@ -65,4 +79,6 @@ module.exports = {
   register,
   getUserByRole,
   getUser,
+  getAll,
+  deleteUser,
 };

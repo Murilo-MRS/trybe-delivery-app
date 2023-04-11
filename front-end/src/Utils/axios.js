@@ -29,4 +29,10 @@ export const patchRequest = async (endpoint, body) => {
   return data;
 };
 
+export const deleteRequest = async (endpoint) => {
+  const { token } = getUser() || { token: '' };
+  setToken(token);
+  return api.delete(endpoint);
+};
+
 export default api;
