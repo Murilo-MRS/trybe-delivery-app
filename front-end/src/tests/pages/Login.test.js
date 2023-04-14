@@ -3,11 +3,12 @@ import { screen, fireEvent, waitFor } from '@testing-library/react';
 import App from '../../App';
 import renderWithRouter from './utils/renderWithRouter';
 
-describe.only('Tests referring to the login page.', () => {
+describe('Tests referring to the login page.', () => {
   const emailDataTestId = 'common_login__input-email';
   const loginBtnDataTestId = 'common_login__button-login';
   const registerBtnDataTestId = 'common_login__button-register';
   const passwordDataTestId = 'common_login__input-password';
+  const validEmail = 'zebirita@email.com';
   const validPassword = '$#zebirita#$';
 
   afterEach(() => {
@@ -95,7 +96,7 @@ describe.only('Tests referring to the login page.', () => {
     const password = screen.getByTestId(passwordDataTestId);
     const loginButton = screen.getByTestId(loginBtnDataTestId);
 
-    fireEvent.change(email, { target: { value: 'zebirita@email.com' } });
+    fireEvent.change(email, { target: { value: validEmail } });
     fireEvent.change(password, { target: { value: validPassword } });
 
     expect(loginButton).toBeEnabled();
@@ -107,7 +108,7 @@ describe.only('Tests referring to the login page.', () => {
     const logoutBtn = screen.getByTestId('customer_products__element-navbar-link-logout');
     expect(logoutBtn).toBeInTheDocument();
 
-    fireEvent.click(loginButton);
+    fireEvent.click(logoutBtn);
   });
 
   it('12 - Test: if redirect to /register', async () => {
