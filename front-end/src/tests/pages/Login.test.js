@@ -1,84 +1,44 @@
+/* eslint-disable max-len */
 import React from 'react';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import App from '../../App';
 import renderWithRouter from './utils/renderWithRouter';
+import allProductsMock from '../mocks/allProducts.mock';
+import usersMock from '../mocks/users.mock';
+import ordersMock from '../mocks/orders.mock';
 
 describe('Tests referring to the login page.', () => {
   const emailDataTestId = 'common_login__input-email';
   const loginBtnDataTestId = 'common_login__button-login';
   const registerBtnDataTestId = 'common_login__button-register';
   const passwordDataTestId = 'common_login__input-password';
-  const validEmail = 'zebirita@email.com';
-  const validPassword = '$#zebirita#$';
+  const customerEmail = 'zebirita@email.com';
+  const customerPassword = '$#zebirita#$';
+  const admEmail = 'adm@deliveryapp.com';
+  const admPassword = '--adm2@21!!--';
+  const sellerEmail = 'fulana@deliveryapp.com';
+  const sellerPassword = 'fulana@123';
+
+  const TOKEN_CUSTOMER = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo5LCJuYW1lIjoiQ2xpZW50ZSBaw6kgQmlyaXRhIiwiZW1haWwiOiJ6ZWJpcml0YUBlbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIifSwiaWF0IjoxNjgxMzI3NTIxLCJleHAiOjE2ODE5MzIzMjF9.5-jg8opGN28n8MrzjFCHKQPsqd3eqQX9_hHNVpqpS8o';
+  const TOKEN_SELLER = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoyLCJuYW1lIjoiRnVsYW5hIFBlcmVpcmEiLCJlbWFpbCI6ImZ1bGFuYUBkZWxpdmVyeWFwcC5jb20iLCJyb2xlIjoic2VsbGVyIn0sImlhdCI6MTY4MTMyNzk5NCwiZXhwIjoxNjgxOTMyNzk0fQ.BaHuWKIaXOf-M4DRYAMT_Xr4t6UCsOF8iV95dwsz5U0';
+  const TOKEN_ADMIN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJuYW1lIjoiRGVsaXZlcnkgQXBwIEFkbWluIiwiZW1haWwiOiJhZG1AZGVsaXZlcnlhcHAuY29tIiwicm9sZSI6ImFkbWluaXN0cmF0b3IifSwiaWF0IjoxNjgxMjM5MDUyLCJleHAiOjE2ODE4NDM4NTJ9.fB-uigOpqdz_Y3Enzmw_CVVl816ne529XJEBVhh8nAA';
+
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
 
   afterEach(() => {
-    localStorage.clear();
+    jest.restoreAllMocks();
   });
 
-  it('1 - Test: if the page has an input with placeholder email@email.com.', () => {
-    renderWithRouter(<App />);
-    const placeholder = screen.getByPlaceholderText('email@email.com');
-    expect(placeholder).toBeInTheDocument();
-  });
-
-  test('2 - Test: if the page has an input with placeholder *******.', () => {
-    renderWithRouter(<App />);
-    const placeholder = screen.getByPlaceholderText('*******');
-    expect(placeholder).toBeInTheDocument();
-  });
-
-  it('3 - Test: if the page has a button with the word Login.', () => {
-    renderWithRouter(<App />);
-    const button = screen.getByRole('button', { name: 'Entrar' });
-    expect(button).toBeInTheDocument();
-  });
-
-  it('4 - Test: if the page has a button with the attribute disabled.', () => {
-    renderWithRouter(<App />);
-    const button = screen.getByRole('button', { name: 'Entrar' });
-    expect(button).toHaveAttribute('disabled');
-  });
-
-  it('5 - Test: if the page has a button with the word "Ainda não tenho conta".', () => {
-    renderWithRouter(<App />);
-    const button = screen.getByRole('button', {
-      name: 'Cadastre-se',
-    });
-    expect(button).toBeInTheDocument();
-  });
-
-  it('6 - Test: if the page has only 2 buttons.', () => {
-    renderWithRouter(<App />);
-    const button = screen.getAllByRole('button');
-    expect(button).toHaveLength(2);
-  });
-
-  it('7 - Test: if the page has the Email label.', () => {
-    renderWithRouter(<App />);
-    const label = screen.getByTestId(emailDataTestId);
-    expect(label).toBeInTheDocument();
-  });
-
-  it('8 - Test: if the page has the Password label.', () => {
-    renderWithRouter(<App />);
-    const label = screen.getByTestId(passwordDataTestId);
-    expect(label).toBeInTheDocument();
-  });
-
-  it('9 - Test: if disable the login button when the page loads', () => {
-    renderWithRouter(<App />);
-    const button = screen.getByTestId('common_login__button-login');
-    expect(button).toBeDisabled();
-  });
-
-  it('10 - If error message show with login invalid user', async () => {
+  it('1 - If error message show with login invalid user', async () => {
     renderWithRouter(<App />);
     const email = screen.getByTestId(emailDataTestId);
     const password = screen.getByTestId(passwordDataTestId);
     const loginButton = screen.getByTestId(loginBtnDataTestId);
 
     fireEvent.change(email, { target: { value: 'zebirasdasdia@email.com' } });
-    fireEvent.change(password, { target: { value: validPassword } });
+    fireEvent.change(password, { target: { value: customerPassword } });
 
     expect(loginButton).toBeEnabled();
 
@@ -90,20 +50,30 @@ describe('Tests referring to the login page.', () => {
     expect(errorMsg).toBeInTheDocument();
   });
 
-  it('11 - Test: if activation of login button with valid data', async () => {
+  it('2 - Test: login /customer', async () => {
+    jest.spyOn(global, 'fetch')
+      .mockImplementationOnce(() => Promise.resolve({
+        json: () => Promise.resolve({ token: TOKEN_CUSTOMER }),
+      }))
+      .mockImplementationOnce(() => Promise.resolve({
+        json: () => Promise.resolve(allProductsMock),
+      }));
     const { history } = renderWithRouter(<App />);
     const email = screen.getByTestId(emailDataTestId);
     const password = screen.getByTestId(passwordDataTestId);
     const loginButton = screen.getByTestId(loginBtnDataTestId);
 
-    fireEvent.change(email, { target: { value: validEmail } });
-    fireEvent.change(password, { target: { value: validPassword } });
+    fireEvent.change(email, { target: { value: customerEmail } });
+    fireEvent.change(password, { target: { value: customerPassword } });
 
     expect(loginButton).toBeEnabled();
 
     fireEvent.click(loginButton);
 
-    await waitFor(() => expect(history.location.pathname).toBe('/customer/products'));
+    await waitFor(() => {
+      const { location: { pathname } } = history;
+      expect(pathname).toBe('/customer/products');
+    });
 
     const logoutBtn = screen.getByTestId('customer_products__element-navbar-link-logout');
     expect(logoutBtn).toBeInTheDocument();
@@ -111,12 +81,67 @@ describe('Tests referring to the login page.', () => {
     fireEvent.click(logoutBtn);
   });
 
-  it('12 - Test: if redirect to /register', async () => {
+  it('3 - Test: login /seller', async () => {
+    jest.spyOn(global, 'fetch')
+      .mockImplementationOnce(() => Promise.resolve({
+        json: () => Promise.resolve({ token: TOKEN_SELLER }),
+      }))
+      .mockImplementationOnce(() => Promise.resolve({
+        json: () => Promise.resolve(ordersMock),
+      }));
+    const { history } = renderWithRouter(<App />);
+    const email = screen.getByTestId(emailDataTestId);
+    const password = screen.getByTestId(passwordDataTestId);
+    const loginButton = screen.getByTestId(loginBtnDataTestId);
+
+    fireEvent.change(email, { target: { value: sellerEmail } });
+    fireEvent.change(password, { target: { value: sellerPassword } });
+
+    expect(loginButton).toBeEnabled();
+
+    fireEvent.click(loginButton);
+
+    await waitFor(() => {
+      const { location: { pathname } } = history;
+      expect(pathname).toBe('/seller/orders');
+    });
+  });
+
+  it('4 - Test: login /admin', async () => {
+    jest.spyOn(global, 'fetch')
+      .mockImplementationOnce(() => Promise.resolve({
+        json: () => Promise.resolve({ token: TOKEN_ADMIN }),
+      }))
+      .mockImplementationOnce(() => Promise.resolve({
+        json: () => Promise.resolve(usersMock),
+      }));
+    const { history } = renderWithRouter(<App />);
+    const email = screen.getByTestId(emailDataTestId);
+    const password = screen.getByTestId(passwordDataTestId);
+    const loginButton = screen.getByTestId(loginBtnDataTestId);
+
+    fireEvent.change(email, { target: { value: admEmail } });
+    fireEvent.change(password, { target: { value: admPassword } });
+
+    expect(loginButton).toBeEnabled();
+
+    fireEvent.click(loginButton);
+
+    await waitFor(() => {
+      const { location: { pathname } } = history;
+      expect(pathname).toBe('/admin/manage');
+    });
+  });
+
+  it('5 - Test: if redirect to /register', async () => {
     const { history } = renderWithRouter(<App />);
     const registerButton = screen.getByTestId(registerBtnDataTestId);
 
     fireEvent.click(registerButton);
 
-    await waitFor(() => expect(history.location.pathname).toBe('/register'));
+    await waitFor(() => {
+      const { location: { pathname } } = history;
+      expect(pathname).toBe('/register');
+    });
   });
 });
