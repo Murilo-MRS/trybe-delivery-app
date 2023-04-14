@@ -6,7 +6,10 @@ import renderWithRouter from './utils/renderWithRouter';
 describe.only('Tests referring to the login page.', () => {
   const emailDataTestId = 'common_login__input-email';
   const loginBtnDataTestId = 'common_login__button-login';
+  const registerBtnDataTestId = 'common_login__button-register';
   const passwordDataTestId = 'common_login__input-password';
+  const validPassword = '$#zebirita#$';
+
   afterEach(() => {
     localStorage.clear();
   });
@@ -74,7 +77,7 @@ describe.only('Tests referring to the login page.', () => {
     const loginButton = screen.getByTestId(loginBtnDataTestId);
 
     fireEvent.change(email, { target: { value: 'zebirasdasdia@email.com' } });
-    fireEvent.change(password, { target: { value: '$#zebirita#$' } });
+    fireEvent.change(password, { target: { value: validPassword } });
 
     expect(loginButton).toBeEnabled();
 
@@ -93,12 +96,26 @@ describe.only('Tests referring to the login page.', () => {
     const loginButton = screen.getByTestId(loginBtnDataTestId);
 
     fireEvent.change(email, { target: { value: 'zebirita@email.com' } });
-    fireEvent.change(password, { target: { value: '$#zebirita#$' } });
+    fireEvent.change(password, { target: { value: validPassword } });
 
     expect(loginButton).toBeEnabled();
 
     fireEvent.click(loginButton);
 
     await waitFor(() => expect(history.location.pathname).toBe('/customer/products'));
+
+    const logoutBtn = screen.getByTestId('customer_products__element-navbar-link-logout');
+    expect(logoutBtn).toBeInTheDocument();
+
+    fireEvent.click(loginButton);
+  });
+
+  it('12 - Test: if redirect to /register', async () => {
+    const { history } = renderWithRouter(<App />);
+    const registerButton = screen.getByTestId(registerBtnDataTestId);
+
+    fireEvent.click(registerButton);
+
+    await waitFor(() => expect(history.location.pathname).toBe('/register'));
   });
 });
