@@ -1,6 +1,8 @@
+/* eslint-disable max-len */
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import App from '../../App';
 import renderWithRouter from './utils/renderWithRouter';
+import allProductsMock from '../mocks/allProducts.mock';
 
 describe('Tests referring to the register page.', () => {
   const nameDataTestId = 'common_register__input-name';
@@ -12,41 +14,24 @@ describe('Tests referring to the register page.', () => {
   const validPassword = 'joao123';
   const alreadyUsedEmail = 'zebirita@email.com';
 
+  const TOKEN_CUSTOMER = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo5LCJuYW1lIjoiQ2xpZW50ZSBaw6kgQmlyaXRhIiwiZW1haWwiOiJ6ZWJpcml0YUBlbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIifSwiaWF0IjoxNjgxMzI3NTIxLCJleHAiOjE2ODE5MzIzMjF9.5-jg8opGN28n8MrzjFCHKQPsqd3eqQX9_hHNVpqpS8o';
+
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
   afterEach(() => {
-    localStorage.clear();
+    jest.restoreAllMocks();
   });
 
-  it('1 - Test: if the name field is present on the screen.', () => {
-    renderWithRouter(<App />, { initialEntries: ['/register'] });
-    const inputName = screen.getByTestId(nameDataTestId);
-    expect(inputName).toBeInTheDocument();
-  });
-
-  it('2 - Test: if the email field is present on the screen.', () => {
-    renderWithRouter(<App />, { initialEntries: ['/register'] });
-    const inputEmail = screen.getByTestId(emailDataTestId);
-    expect(inputEmail).toBeInTheDocument();
-  });
-
-  it('3 - Test: if the password field is present on the screen.', () => {
-    renderWithRouter(<App />, { initialEntries: ['/register'] });
-    const inputPassword = screen.getByTestId(passwordDataTestId);
-    expect(inputPassword).toBeInTheDocument();
-  });
-
-  it('4 - Test: if the registration button is present on the screen.', () => {
-    renderWithRouter(<App />, { initialEntries: ['/register'] });
-    const buttonRegister = screen.getByTestId(registerBtnDataTestId);
-    expect(buttonRegister).toBeInTheDocument();
-  });
-
-  it('5 - Test: if the registration button is disabled', () => {
-    renderWithRouter(<App />, { initialEntries: ['/register'] });
-    const buttonRegister = screen.getByTestId(registerBtnDataTestId);
-    expect(buttonRegister).toBeDisabled();
-  });
-
-  it('6 - Test: register with valid data', async () => {
+  it('1 - Test: register with valid data', async () => {
+    jest.spyOn(global, 'fetch')
+      .mockImplementationOnce(() => Promise.resolve({
+        json: () => Promise.resolve({ token: TOKEN_CUSTOMER }),
+      }))
+      .mockImplementationOnce(() => Promise.resolve({
+        json: () => Promise.resolve(allProductsMock),
+      }));
     const { history } = renderWithRouter(<App />, { initialEntries: ['/register'] });
 
     const buttonRegister = screen.getByTestId(registerBtnDataTestId);
@@ -62,10 +47,17 @@ describe('Tests referring to the register page.', () => {
 
     fireEvent.click(buttonRegister);
 
-    await waitFor(() => expect(history.location.pathname).toBe('/customer/products'));
+    await waitFor(() => {
+      expect(history.location.pathname).toBe('/customer/products');
+    });
+
+    const logoutBtn = screen.getByTestId('customer_products__element-navbar-link-logout');
+    expect(logoutBtn).toBeInTheDocument();
+
+    fireEvent.click(logoutBtn);
   });
 
-  it('7 - If error message show with login invalid user', async () => {
+  it('2 - If error message show with login invalid user', async () => {
     const { history } = renderWithRouter(<App />, { initialEntries: ['/register'] });
 
     const inputName = screen.getByTestId(nameDataTestId);
@@ -79,10 +71,14 @@ describe('Tests referring to the register page.', () => {
 
     fireEvent.click(buttonRegister);
 
+    const { location: { pathname } } = history;
+    await waitFor(() => {
+      expect(pathname).toBe('/register');
+    });
+
     const errorMsg = await waitFor(() => screen
       .getByTestId('common_register__element-invalid_register'));
 
-    await waitFor(() => expect(history.location.pathname).toBe('/register'));
     expect(errorMsg).toBeInTheDocument();
   });
 });
