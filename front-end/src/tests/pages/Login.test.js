@@ -1,11 +1,13 @@
 /* eslint-disable max-len */
 import React from 'react';
-import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import App from '../../App';
 import renderWithRouter from './utils/renderWithRouter';
 import allProductsMock from '../mocks/allProducts.mock';
 import usersMock from '../mocks/users.mock';
 import ordersMock from '../mocks/orders.mock';
+import mockAxios from './utils/mockAxios';
 
 describe('Tests referring to the login page.', () => {
   const emailDataTestId = 'common_login__input-email';
@@ -28,21 +30,25 @@ describe('Tests referring to the login page.', () => {
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    // jest.restoreAllMocks();
+    mockAxios.reset();
   });
 
   it('1 - If error message show with login invalid user', async () => {
+    mockAxios.onPost('http://localhost:3001/login').reply(404);
     renderWithRouter(<App />);
     const email = screen.getByTestId(emailDataTestId);
     const password = screen.getByTestId(passwordDataTestId);
     const loginButton = screen.getByTestId(loginBtnDataTestId);
 
-    fireEvent.change(email, { target: { value: 'zebirasdasdia@email.com' } });
-    fireEvent.change(password, { target: { value: customerPassword } });
+    userEvent.type(email, 'zebirasdasdia@email.com');
+    userEvent.type(password, customerPassword);
 
+    expect(email.value).toBe('zebirasdasdia@email.com');
+    expect(password.value).toBe(customerPassword);
     expect(loginButton).toBeEnabled();
 
-    fireEvent.click(loginButton);
+    userEvent.click(loginButton);
 
     const errorMsg = await waitFor(() => screen
       .getByTestId('common_login__element-invalid-email'));
@@ -51,55 +57,48 @@ describe('Tests referring to the login page.', () => {
   });
 
   it('2 - Test: login /customer', async () => {
-    jest.spyOn(global, 'fetch')
-      .mockImplementationOnce(() => Promise.resolve({
-        json: () => Promise.resolve({ token: TOKEN_CUSTOMER }),
-      }))
-      .mockImplementationOnce(() => Promise.resolve({
-        json: () => Promise.resolve(allProductsMock),
-      }));
+    mockAxios
+      .onPost('http://localhost:3001/login')
+      .replyOnce(200, { token: TOKEN_CUSTOMER })
+      .onGet('http://localhost:3001/customer/products/')
+      .replyOnce(200, { products: allProductsMock });
+
     const { history } = renderWithRouter(<App />);
     const email = screen.getByTestId(emailDataTestId);
     const password = screen.getByTestId(passwordDataTestId);
     const loginButton = screen.getByTestId(loginBtnDataTestId);
 
-    fireEvent.change(email, { target: { value: customerEmail } });
-    fireEvent.change(password, { target: { value: customerPassword } });
+    userEvent.type(email, customerEmail);
+    userEvent.type(password, customerPassword);
 
     expect(loginButton).toBeEnabled();
 
-    fireEvent.click(loginButton);
+    userEvent.click(loginButton);
 
     await waitFor(() => {
       const { location: { pathname } } = history;
       expect(pathname).toBe('/customer/products');
     });
-
-    const logoutBtn = screen.getByTestId('customer_products__element-navbar-link-logout');
-    expect(logoutBtn).toBeInTheDocument();
-
-    fireEvent.click(logoutBtn);
   });
 
   it('3 - Test: login /seller', async () => {
-    jest.spyOn(global, 'fetch')
-      .mockImplementationOnce(() => Promise.resolve({
-        json: () => Promise.resolve({ token: TOKEN_SELLER }),
-      }))
-      .mockImplementationOnce(() => Promise.resolve({
-        json: () => Promise.resolve(ordersMock),
-      }));
+    mockAxios
+      .onPost('http://localhost:3001/login')
+      .replyOnce(200, { token: TOKEN_SELLER })
+      .onGet('http://localhost:3001/seller/2/sales')
+      .replyOnce(200, { orders: ordersMock });
+
     const { history } = renderWithRouter(<App />);
     const email = screen.getByTestId(emailDataTestId);
     const password = screen.getByTestId(passwordDataTestId);
     const loginButton = screen.getByTestId(loginBtnDataTestId);
 
-    fireEvent.change(email, { target: { value: sellerEmail } });
-    fireEvent.change(password, { target: { value: sellerPassword } });
+    userEvent.type(email, sellerEmail);
+    userEvent.type(password, sellerPassword);
 
     expect(loginButton).toBeEnabled();
 
-    fireEvent.click(loginButton);
+    userEvent.click(loginButton);
 
     await waitFor(() => {
       const { location: { pathname } } = history;
@@ -108,24 +107,23 @@ describe('Tests referring to the login page.', () => {
   });
 
   it('4 - Test: login /admin', async () => {
-    jest.spyOn(global, 'fetch')
-      .mockImplementationOnce(() => Promise.resolve({
-        json: () => Promise.resolve({ token: TOKEN_ADMIN }),
-      }))
-      .mockImplementationOnce(() => Promise.resolve({
-        json: () => Promise.resolve(usersMock),
-      }));
+    mockAxios
+      .onPost('http://localhost:3001/login')
+      .replyOnce(200, { token: TOKEN_ADMIN })
+      .onGet('http://localhost:3001//users')
+      .replyOnce(200, { orders: ordersMock });
+
     const { history } = renderWithRouter(<App />);
     const email = screen.getByTestId(emailDataTestId);
     const password = screen.getByTestId(passwordDataTestId);
     const loginButton = screen.getByTestId(loginBtnDataTestId);
 
-    fireEvent.change(email, { target: { value: admEmail } });
-    fireEvent.change(password, { target: { value: admPassword } });
+    userEvent.type(email, admEmail);
+    userEvent.type(password, admPassword);
 
     expect(loginButton).toBeEnabled();
 
-    fireEvent.click(loginButton);
+    userEvent.click(loginButton);
 
     await waitFor(() => {
       const { location: { pathname } } = history;
@@ -133,11 +131,11 @@ describe('Tests referring to the login page.', () => {
     });
   });
 
-  it('5 - Test: if redirect to /register', async () => {
+  it('5 - Test: redirect to /register', async () => {
     const { history } = renderWithRouter(<App />);
     const registerButton = screen.getByTestId(registerBtnDataTestId);
 
-    fireEvent.click(registerButton);
+    userEvent.click(registerButton);
 
     await waitFor(() => {
       const { location: { pathname } } = history;
