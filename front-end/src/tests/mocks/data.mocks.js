@@ -28,6 +28,12 @@ const alreadyUsedEmail = 'zebirita@email.com';
 const registerEndpoint = 'http://localhost:3001/login';
 const checkoutBtnDataTestId = 'customer_products__checkout-bottom-value';
 
+const selectSellerDataTestId = 'customer_checkout__select-seller';
+const inputAddressDataTestId = 'customer_checkout__input-address';
+const inputAddressNumDataTestId = 'customer_checkout__input-address-number';
+const finishBtnDataTestId = 'customer_checkout__button-submit-order';
+const deliveredBtnDataTestId = 'customer_order_details__button-delivery-check';
+
 export {
   emailDataTestId,
   loginBtnDataTestId,
@@ -55,4 +61,9 @@ export {
   passwordRegisterDataTestId,
   registerRegisterBtnDataTestId,
   checkoutBtnDataTestId,
+  selectSellerDataTestId,
+  inputAddressDataTestId,
+  inputAddressNumDataTestId,
+  finishBtnDataTestId,
+  deliveredBtnDataTestId,
 };
