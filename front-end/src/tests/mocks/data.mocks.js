@@ -18,11 +18,15 @@ const TOKEN_SELLER = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoyL
 const TOKEN_ADMIN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJuYW1lIjoiRGVsaXZlcnkgQXBwIEFkbWluIiwiZW1haWwiOiJhZG1AZGVsaXZlcnlhcHAuY29tIiwicm9sZSI6ImFkbWluaXN0cmF0b3IifSwiaWF0IjoxNjgxMjM5MDUyLCJleHAiOjE2ODE4NDM4NTJ9.fB-uigOpqdz_Y3Enzmw_CVVl816ne529XJEBVhh8nAA';
 
 const nameDataTestId = 'common_register__input-name';
+const emailRegisterDataTestId = 'common_register__input-email';
+const passwordRegisterDataTestId = 'common_register__input-password';
+const registerRegisterBtnDataTestId = 'common_register__button-register';
 const validName = 'João da Silva';
 const validEmail = 'joao@email.com';
 const validPassword = 'joao123';
 const alreadyUsedEmail = 'zebirita@email.com';
 const registerEndpoint = 'http://localhost:3001/login';
+const checkoutBtnDataTestId = 'customer_products__checkout-bottom-value';
 
 export {
   emailDataTestId,
@@ -47,4 +51,8 @@ export {
   validPassword,
   alreadyUsedEmail,
   registerEndpoint,
+  emailRegisterDataTestId,
+  passwordRegisterDataTestId,
+  registerRegisterBtnDataTestId,
+  checkoutBtnDataTestId,
 };

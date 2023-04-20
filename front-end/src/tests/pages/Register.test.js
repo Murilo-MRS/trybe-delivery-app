@@ -5,26 +5,23 @@ import App from '../../App';
 import renderWithRouter from './utils/renderWithRouter';
 import allProductsMock from '../mocks/allProducts.mock';
 import mockAxios from './utils/mockAxios';
+import {
+  STATUS_OK, TOKEN_CUSTOMER,
+  alreadyUsedEmail, nameDataTestId,
+  registerEndpoint, validEmail,
+  validName, validPassword,
+  emailRegisterDataTestId,
+  passwordRegisterDataTestId,
+  registerRegisterBtnDataTestId,
+} from '../mocks/data.mocks';
 
 describe('Tests referring to the register page.', () => {
-  const nameDataTestId = 'common_register__input-name';
-  const emailDataTestId = 'common_register__input-email';
-  const passwordDataTestId = 'common_register__input-password';
-  const registerBtnDataTestId = 'common_register__button-register';
-  const validName = 'João da Silva';
-  const validEmail = 'joao@email.com';
-  const validPassword = 'joao123';
-  const alreadyUsedEmail = 'zebirita@email.com';
-  const registerEndpoint = 'http://localhost:3001/login';
-  const TOKEN_CUSTOMER = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo5LCJuYW1lIjoiQ2xpZW50ZSBaw6kgQmlyaXRhIiwiZW1haWwiOiJ6ZWJpcml0YUBlbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIifSwiaWF0IjoxNjgxMzI3NTIxLCJleHAiOjE2ODE5MzIzMjF9.5-jg8opGN28n8MrzjFCHKQPsqd3eqQX9_hHNVpqpS8o';
-  const STATUS_OK = 200;
-
   beforeEach(() => {
     window.localStorage.clear();
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    mockAxios.reset();
   });
 
   it('1 - Test: register with valid data', async () => {
@@ -34,12 +31,14 @@ describe('Tests referring to the register page.', () => {
       .onGet('http://localhost:3001/customer/products/')
       .replyOnce(STATUS_OK, { products: allProductsMock });
 
-    const { history } = renderWithRouter(<App />, { initialEntries: ['/register'] });
+    const { history } = renderWithRouter(<App />, {
+      initialEntries: ['/register'],
+    });
 
-    const buttonRegister = screen.getByTestId(registerBtnDataTestId);
+    const buttonRegister = screen.getByTestId(registerRegisterBtnDataTestId);
     const inputName = screen.getByTestId(nameDataTestId);
-    const inputEmail = screen.getByTestId(emailDataTestId);
-    const inputPassword = screen.getByTestId(passwordDataTestId);
+    const inputEmail = screen.getByTestId(emailRegisterDataTestId);
+    const inputPassword = screen.getByTestId(passwordRegisterDataTestId);
 
     userEvent.type(inputName, validName);
     userEvent.type(inputEmail, validEmail);
@@ -50,23 +49,29 @@ describe('Tests referring to the register page.', () => {
     userEvent.click(buttonRegister);
 
     await waitFor(() => {
-      const { location: { pathname } } = history;
+      const {
+        location: { pathname },
+      } = history;
       expect(pathname).toBe('/customer/products');
     });
 
-    const logoutBtn = screen.getByTestId('customer_products__element-navbar-link-logout');
+    const logoutBtn = screen.getByTestId(
+      'customer_products__element-navbar-link-logout',
+    );
     expect(logoutBtn).toBeInTheDocument();
 
     userEvent.click(logoutBtn);
   });
 
   it('2 - If error message show with login invalid user', async () => {
-    const { history } = renderWithRouter(<App />, { initialEntries: ['/register'] });
+    const { history } = renderWithRouter(<App />, {
+      initialEntries: ['/register'],
+    });
 
     const inputName = screen.getByTestId(nameDataTestId);
-    const email = screen.getByTestId(emailDataTestId);
-    const password = screen.getByTestId(passwordDataTestId);
-    const buttonRegister = screen.getByTestId(registerBtnDataTestId);
+    const email = screen.getByTestId(emailRegisterDataTestId);
+    const password = screen.getByTestId(passwordRegisterDataTestId);
+    const buttonRegister = screen.getByTestId(registerRegisterBtnDataTestId);
 
     userEvent.type(inputName, validName);
     userEvent.type(email, alreadyUsedEmail);
@@ -75,12 +80,13 @@ describe('Tests referring to the register page.', () => {
     userEvent.click(buttonRegister);
 
     await waitFor(() => {
-      const { location: { pathname } } = history;
+      const {
+        location: { pathname },
+      } = history;
       expect(pathname).toBe('/register');
     });
 
-    const errorMsg = await waitFor(() => screen
-      .getByTestId('common_register__element-invalid_register'));
+    const errorMsg = await waitFor(() => screen.getByTestId('common_register__element-invalid_register'));
 
     expect(errorMsg).toBeInTheDocument();
   });
