@@ -6,18 +6,20 @@ import renderWithRouter from './utils/renderWithRouter';
 import allProductsMock from '../mocks/allProducts.mock';
 import mockAxios from './utils/mockAxios';
 import {
-  STATUS_OK,
-  TOKEN_CUSTOMER,
-  checkoutBtnDataTestId,
-  customerEmail,
-  customerPassword,
-  emailDataTestId,
-  loginBtnDataTestId,
-  loginEndpoint,
-  passwordDataTestId,
+  STATUS_OK, TOKEN_CUSTOMER,
+  checkoutBtnDataTestId, customerEmail,
+  customerPassword, emailDataTestId,
+  finishBtnDataTestId, inputAddressDataTestId,
+  inputAddressNumDataTestId, loginBtnDataTestId,
+  loginEndpoint, passwordDataTestId,
+  selectSellerDataTestId, deliveredBtnDataTestId,
 } from '../mocks/data.mocks';
+import usersMock from '../mocks/users.mock';
+import ordersMock from '../mocks/orders.mock';
 
 describe('Test: login /seller', () => {
+  const CREATED = 201;
+
   beforeEach(() => {
     window.localStorage.clear();
   });
@@ -61,5 +63,30 @@ describe('Test: login /seller', () => {
 
     expect(checkouBtn).toBeEnabled();
     userEvent.click(checkouBtn);
+
+    mockAxios
+      .onGet('http://localhost:3001/sellers')
+      .replyOnce(STATUS_OK, { sellers: [usersMock[0]] })
+      .onPost('http://localhost:3001/sales')
+      .replyOnce(CREATED, { sale: [ordersMock[0]] });
+
+    const removeOrder = await waitFor(() => screen.getAllByText('Remover'));
+    const selectSeller = await waitFor(() => screen.getByTestId(selectSellerDataTestId));
+    const inputAddress = await waitFor(() => screen.getByTestId(inputAddressDataTestId));
+    const inputAddressNum = await waitFor(() => screen.getByTestId(inputAddressNumDataTestId));
+    const finishBtn = await waitFor(() => screen.getByTestId(finishBtnDataTestId));
+
+    expect(removeOrder.length).toBe(2);
+    userEvent.click(removeOrder[1]);
+
+    await waitFor(() => userEvent.selectOptions(selectSeller, 'Fulana Pereira'));
+    userEvent.type(inputAddress, 'Rua de Testes');
+    userEvent.type(inputAddressNum, '123');
+
+    userEvent.click(finishBtn);
+    const changeToDeliveredBtn = await waitFor(() => screen
+      .getByTestId(deliveredBtnDataTestId));
+
+    expect(changeToDeliveredBtn).toBeInTheDocument();
   });
 });
