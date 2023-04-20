@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import App from '../../App';
 import renderWithRouter from './utils/renderWithRouter';
 import allProductsMock from '../mocks/allProducts.mock';
+import mockAxios from './utils/mockAxios';
 
 describe('Tests referring to the register page.', () => {
   const nameDataTestId = 'common_register__input-name';
@@ -14,8 +15,9 @@ describe('Tests referring to the register page.', () => {
   const validEmail = 'joao@email.com';
   const validPassword = 'joao123';
   const alreadyUsedEmail = 'zebirita@email.com';
-
+  const registerEndpoint = 'http://localhost:3001/login';
   const TOKEN_CUSTOMER = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo5LCJuYW1lIjoiQ2xpZW50ZSBaw6kgQmlyaXRhIiwiZW1haWwiOiJ6ZWJpcml0YUBlbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIifSwiaWF0IjoxNjgxMzI3NTIxLCJleHAiOjE2ODE5MzIzMjF9.5-jg8opGN28n8MrzjFCHKQPsqd3eqQX9_hHNVpqpS8o';
+  const STATUS_OK = 200;
 
   beforeEach(() => {
     window.localStorage.clear();
@@ -26,13 +28,12 @@ describe('Tests referring to the register page.', () => {
   });
 
   it('1 - Test: register with valid data', async () => {
-    jest.spyOn(global, 'fetch')
-      .mockImplementationOnce(() => Promise.resolve({
-        json: () => Promise.resolve({ token: TOKEN_CUSTOMER }),
-      }))
-      .mockImplementationOnce(() => Promise.resolve({
-        json: () => Promise.resolve(allProductsMock),
-      }));
+    mockAxios
+      .onPost(registerEndpoint)
+      .replyOnce(STATUS_OK, { token: TOKEN_CUSTOMER })
+      .onGet('http://localhost:3001/customer/products/')
+      .replyOnce(STATUS_OK, { products: allProductsMock });
+
     const { history } = renderWithRouter(<App />, { initialEntries: ['/register'] });
 
     const buttonRegister = screen.getByTestId(registerBtnDataTestId);
@@ -49,7 +50,8 @@ describe('Tests referring to the register page.', () => {
     userEvent.click(buttonRegister);
 
     await waitFor(() => {
-      expect(history.location.pathname).toBe('/customer/products');
+      const { location: { pathname } } = history;
+      expect(pathname).toBe('/customer/products');
     });
 
     const logoutBtn = screen.getByTestId('customer_products__element-navbar-link-logout');
