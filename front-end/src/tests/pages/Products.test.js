@@ -88,5 +88,11 @@ describe('Test: Fluxo de fazer pedido com usuário cliente', () => {
       .getByTestId(deliveredBtnDataTestId));
 
     expect(changeToDeliveredBtn).toBeInTheDocument();
+
+    const navMyOrder = await waitFor(() => screen.getByTestId('customer_products__element-navbar-link-orders'));
+    userEvent.click(navMyOrder);
+
+    const orderLink = await waitFor(() => screen.getByTestId('customer_orders__element-order-id-1'));
+    userEvent.click(orderLink);
   });
 });
