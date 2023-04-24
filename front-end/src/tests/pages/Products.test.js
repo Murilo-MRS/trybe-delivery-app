@@ -6,7 +6,7 @@ import renderWithRouter from './utils/renderWithRouter';
 import allProductsMock from '../mocks/allProducts.mock';
 import mockAxios from './utils/mockAxios';
 import {
-  STATUS_OK, TOKEN_CUSTOMER,
+  STATUS_OK,
   checkoutBtnDataTestId, customerEmail,
   customerPassword, emailDataTestId,
   finishBtnDataTestId, inputAddressDataTestId,
@@ -16,6 +16,8 @@ import {
 } from '../mocks/data.mocks';
 import usersMock from '../mocks/users.mock';
 import ordersMock from '../mocks/orders.mock';
+
+const TOKEN_CUSTOMER = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo5LCJuYW1lIjoiQ2xpZW50ZSBaw6kgQmlyaXRhIiwiZW1haWwiOiJ6ZWJpcml0YUBlbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIifSwiaWF0IjoxNjgxMzI3NTIxLCJleHAiOjE2ODE5MzIzMjF9.5-jg8opGN28n8MrzjFCHKQPsqd3eqQX9_hHNVpqpS8o';
 
 describe('Test: Fluxo de fazer pedido com usuário cliente', () => {
   const CREATED = 201;

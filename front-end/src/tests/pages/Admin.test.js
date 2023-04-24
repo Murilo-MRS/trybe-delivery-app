@@ -6,7 +6,7 @@ import App from '../../App';
 import renderWithRouter from './utils/renderWithRouter';
 import usersMock from '../mocks/users.mock';
 import mockAxios from './utils/mockAxios';
-import { CREATED_STATUS, STATUS_OK, TOKEN_ADMIN,
+import { CREATED_STATUS, STATUS_OK,
   admEmail, admPassword, DELETE_STATUS,
   admRegisterBtnDataTestId,
   admRegisterEmailDataTestId,
@@ -17,6 +17,8 @@ import { CREATED_STATUS, STATUS_OK, TOKEN_ADMIN,
   emailDataTestId, loginBtnDataTestId,
   loginEndpoint, newUserMock, passwordDataTestId,
 } from '../mocks/data.mocks';
+
+const TOKEN_ADMIN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJuYW1lIjoiRGVsaXZlcnkgQXBwIEFkbWluIiwiZW1haWwiOiJhZG1AZGVsaXZlcnlhcHAuY29tIiwicm9sZSI6ImFkbWluaXN0cmF0b3IifSwiaWF0IjoxNjgxMjM5MDUyLCJleHAiOjE2ODE4NDM4NTJ9.fB-uigOpqdz_Y3Enzmw_CVVl816ne529XJEBVhh8nAA';
 
 describe('Tests referring to the login page.', () => {
   beforeEach(() => {

@@ -8,11 +8,14 @@ import allProductsMock from '../mocks/allProducts.mock';
 import usersMock from '../mocks/users.mock';
 import ordersMock from '../mocks/orders.mock';
 import mockAxios from './utils/mockAxios';
-import { NOT_FOUND, STATUS_OK, TOKEN_ADMIN,
-  TOKEN_CUSTOMER, TOKEN_SELLER, admEmail, admPassword, customerEmail,
+import { NOT_FOUND, STATUS_OK, admEmail, admPassword, customerEmail,
   customerPassword, emailDataTestId, loginBtnDataTestId,
   loginEndpoint, passwordDataTestId, registerBtnDataTestId,
   sellerEmail, sellerPassword } from '../mocks/data.mocks';
+
+const TOKEN_CUSTOMER = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo5LCJuYW1lIjoiQ2xpZW50ZSBaw6kgQmlyaXRhIiwiZW1haWwiOiJ6ZWJpcml0YUBlbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIifSwiaWF0IjoxNjgxMzI3NTIxLCJleHAiOjE2ODE5MzIzMjF9.5-jg8opGN28n8MrzjFCHKQPsqd3eqQX9_hHNVpqpS8o';
+const TOKEN_SELLER = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoyLCJuYW1lIjoiRnVsYW5hIFBlcmVpcmEiLCJlbWFpbCI6ImZ1bGFuYUBkZWxpdmVyeWFwcC5jb20iLCJyb2xlIjoic2VsbGVyIn0sImlhdCI6MTY4MTMyNzk5NCwiZXhwIjoxNjgxOTMyNzk0fQ.BaHuWKIaXOf-M4DRYAMT_Xr4t6UCsOF8iV95dwsz5U0';
+const TOKEN_ADMIN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJuYW1lIjoiRGVsaXZlcnkgQXBwIEFkbWluIiwiZW1haWwiOiJhZG1AZGVsaXZlcnlhcHAuY29tIiwicm9sZSI6ImFkbWluaXN0cmF0b3IifSwiaWF0IjoxNjgxMjM5MDUyLCJleHAiOjE2ODE4NDM4NTJ9.fB-uigOpqdz_Y3Enzmw_CVVl816ne529XJEBVhh8nAA';
 
 describe('Test: Fluxo de login com diferentes tipos de usuários', () => {
   beforeEach(() => {

@@ -6,7 +6,7 @@ import renderWithRouter from './utils/renderWithRouter';
 import allProductsMock from '../mocks/allProducts.mock';
 import mockAxios from './utils/mockAxios';
 import {
-  STATUS_OK, TOKEN_CUSTOMER,
+  STATUS_OK,
   alreadyUsedEmail, nameDataTestId,
   registerEndpoint, validEmail,
   validName, validPassword,
@@ -14,6 +14,8 @@ import {
   passwordRegisterDataTestId,
   registerRegisterBtnDataTestId,
 } from '../mocks/data.mocks';
+
+const TOKEN_CUSTOMER = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo5LCJuYW1lIjoiQ2xpZW50ZSBaw6kgQmlyaXRhIiwiZW1haWwiOiJ6ZWJpcml0YUBlbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIifSwiaWF0IjoxNjgxMzI3NTIxLCJleHAiOjE2ODE5MzIzMjF9.5-jg8opGN28n8MrzjFCHKQPsqd3eqQX9_hHNVpqpS8o';
 
 describe('Tests referring to the register page.', () => {
   beforeEach(() => {
