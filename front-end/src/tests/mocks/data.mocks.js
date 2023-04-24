@@ -10,6 +10,8 @@ const admPassword = '--adm2@21!!--';
 const sellerEmail = 'fulana@deliveryapp.com';
 const sellerPassword = 'fulana@123';
 const STATUS_OK = 200;
+const CREATED_STATUS = 201;
+const DELETE_STATUS = 204;
 const NOT_FOUND = 404;
 const loginEndpoint = 'http://localhost:3001/login';
 
@@ -34,36 +36,44 @@ const inputAddressNumDataTestId = 'customer_checkout__input-address-number';
 const finishBtnDataTestId = 'customer_checkout__button-submit-order';
 const deliveredBtnDataTestId = 'customer_order_details__button-delivery-check';
 
+const newUsername = 'exemplo exemplo';
+const newUserEmail = 'exemplo@exemplo.com';
+const newUserPassword = '111111';
+const selectValue = 'customer';
+const newUserMock = {
+  id: 4,
+  name: newUsername,
+  email: newUserEmail,
+  password: newUserPassword,
+  role: selectValue,
+};
+const admRegisterBtnDataTestId = 'admin_manage__button-register';
+const admRegisterNameDataTestId = 'admin_manage__input-name';
+const admRegisterEmailDataTestId = 'admin_manage__input-email';
+const admRegisterPasswordDataTestId = 'admin_manage__input-password';
+const admRegisterSelectDataTestId = 'admin_manage__select-role';
+const admRegisterErrMsgDataTestId = 'admin_manage__element-invalid-register';
+
 export {
-  emailDataTestId,
-  loginBtnDataTestId,
-  registerBtnDataTestId,
-  passwordDataTestId,
-  customerEmail,
-  customerPassword,
-  admEmail,
-  admPassword,
-  sellerEmail,
-  sellerPassword,
-  STATUS_OK,
-  NOT_FOUND,
-  loginEndpoint,
-  TOKEN_CUSTOMER,
-  TOKEN_SELLER,
-  TOKEN_ADMIN,
-  nameDataTestId,
-  validName,
-  validEmail,
-  validPassword,
-  alreadyUsedEmail,
-  registerEndpoint,
-  emailRegisterDataTestId,
-  passwordRegisterDataTestId,
-  registerRegisterBtnDataTestId,
-  checkoutBtnDataTestId,
-  selectSellerDataTestId,
-  inputAddressDataTestId,
-  inputAddressNumDataTestId,
-  finishBtnDataTestId,
-  deliveredBtnDataTestId,
+  emailDataTestId, loginBtnDataTestId,
+  registerBtnDataTestId, passwordDataTestId,
+  customerEmail, customerPassword,
+  admEmail, admPassword,
+  sellerEmail, sellerPassword,
+  STATUS_OK, NOT_FOUND, CREATED_STATUS,
+  loginEndpoint, TOKEN_CUSTOMER, DELETE_STATUS,
+  TOKEN_SELLER, TOKEN_ADMIN,
+  nameDataTestId, validName,
+  validEmail, validPassword,
+  alreadyUsedEmail, registerEndpoint,
+  emailRegisterDataTestId, passwordRegisterDataTestId,
+  registerRegisterBtnDataTestId, checkoutBtnDataTestId,
+  selectSellerDataTestId, inputAddressDataTestId,
+  inputAddressNumDataTestId, finishBtnDataTestId,
+  deliveredBtnDataTestId, newUsername,
+  newUserEmail, newUserPassword,
+  selectValue, admRegisterBtnDataTestId,
+  admRegisterNameDataTestId, admRegisterEmailDataTestId,
+  admRegisterPasswordDataTestId, admRegisterSelectDataTestId,
+  admRegisterErrMsgDataTestId, newUserMock,
 };

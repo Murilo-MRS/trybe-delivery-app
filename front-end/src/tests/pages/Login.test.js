@@ -14,7 +14,7 @@ import { NOT_FOUND, STATUS_OK, TOKEN_ADMIN,
   loginEndpoint, passwordDataTestId, registerBtnDataTestId,
   sellerEmail, sellerPassword } from '../mocks/data.mocks';
 
-describe('Tests referring to the login page.', () => {
+describe('Test: Fluxo de login com diferentes tipos de usuários', () => {
   beforeEach(() => {
     window.localStorage.clear();
   });

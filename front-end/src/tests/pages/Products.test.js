@@ -17,7 +17,7 @@ import {
 import usersMock from '../mocks/users.mock';
 import ordersMock from '../mocks/orders.mock';
 
-describe('Test: login /seller', () => {
+describe('Test: Fluxo de fazer pedido com usuário cliente', () => {
   const CREATED = 201;
 
   beforeEach(() => {
